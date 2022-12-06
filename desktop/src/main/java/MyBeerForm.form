@@ -39,6 +39,13 @@
                   <text value=""/>
                 </properties>
               </component>
+              <component id="66525" class="javax.swing.JButton" binding="filterButton">
+                <constraints/>
+                <properties>
+                  <preferredSize width="30" height="30"/>
+                  <text value=""/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="19d95" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">

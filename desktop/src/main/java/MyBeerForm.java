@@ -16,6 +16,7 @@ import javax.swing.tree.DefaultTreeModel;
 public class MyBeerForm {
     private JTextField searchField;
     private JButton searchButton;
+    private JButton filterButton;
     private JButton userButton;
     private JLabel userName;
     private JTextPane beerInfo;
@@ -25,6 +26,7 @@ public class MyBeerForm {
     private JPanel reviewPanel;
     private DefaultListModel beerListModel;
     private JTree commentTree;
+    private JButton addCommentButton;
     private JsonArray data;
 
     MyBeerForm() throws FileNotFoundException {
@@ -55,6 +57,10 @@ public class MyBeerForm {
         ImageIcon searchIcon = new ImageIcon(getScaledImage(new ImageIcon("loupe.png").getImage(), 30, 30));
         searchButton.addActionListener(e->System.out.printf("Searching for %s!%n", searchField.getText()));
         searchButton.setIcon(searchIcon);
+
+        ImageIcon filterIcon = new ImageIcon(getScaledImage(new ImageIcon("filter.png").getImage(), 30, 30));
+        filterButton.addActionListener(e->System.out.println("Opening filter window"));
+        filterButton.setIcon(filterIcon);
         // ==================================================================
 
         // =========================== USER SPACE ===========================
@@ -136,11 +142,17 @@ public class MyBeerForm {
             root.add(loadComments(comments.getJsonObject(i)));
         }
         reviewPanel.revalidate();
+
+        // expand comment tree
+        for(int i=0; i<commentTree.getRowCount(); i++) {
+            commentTree.expandRow(i);
+        }
     }
 
     private DefaultMutableTreeNode loadComments(JsonObject jsonRoot) {
         String comment = String.format("%s: %s", jsonRoot.getString("user"), jsonRoot.getString("comment"));
-        DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(comment);
+        String html = "<html><body style='width: %1spx'>%1s";
+        DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(String.format(html, 200, comment));
 
         JsonArray replies = jsonRoot.getJsonArray("replies");
         for(int i=0; i<replies.size(); i++) {
