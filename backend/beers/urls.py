@@ -1,14 +1,14 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
 from beers import views
+from beers.views import CategoryViewSet, BeerViewSet, CommentViewSet, ReviewViewSet
 
+router = routers.DefaultRouter()
+router.register('categories', CategoryViewSet)
+router.register('beers', BeerViewSet)
+router.register('reviews', ReviewViewSet)
+router.register('comments', CommentViewSet)
 urlpatterns = [
-    path('', views.api_overview),
-    path('beers/', views.beers_list),
-    path('beers/<int:beer_pk>/', views.beer_detail),
-    path('reviews/', views.reviews_list),
-    path('reviews/<int:review_pk>/', views.review_details),
-    path('comments/', views.comments_list),
-    path('comments/<int:comment_pk>/', views.comment_detail),
-
+    path('', include(router.urls)),
 ]

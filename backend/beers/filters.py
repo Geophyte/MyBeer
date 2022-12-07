@@ -23,3 +23,11 @@ class CommentFilter(filters.FilterSet):
     class Meta:
         model = Comment
         fields = ('review',)
+
+
+class BeerFilter(filters.FilterSet):
+    category = filters.CharFilter(field_name='category__name', lookup_expr='exact')
+
+    class Meta:
+        model = Beer
+        fields = ('category',)
