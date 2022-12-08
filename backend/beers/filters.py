@@ -7,11 +7,12 @@ class ReviewFilter(filters.FilterSet):
     http://127.0.0.1:8000/api/v1/comments/?beer=1
     """
 
-    beer = filters.NumberFilter(field_name='beer')
+    beer_name = filters.CharFilter(field_name='beer__name', lookup_expr='exact')
+    beer_id = filters.NumberFilter(field_name='beer_id')
 
     class Meta:
         model = Review
-        fields = ('beer',)
+        fields = ('beer_name', 'beer_id')
 
 
 class CommentFilter(filters.FilterSet):
