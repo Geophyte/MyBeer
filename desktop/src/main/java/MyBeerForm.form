@@ -112,16 +112,24 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="cebaa" class="javax.swing.JTextPane" binding="beerInfo">
-                        <constraints border-constraint="Center"/>
+                      <grid id="d461a" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints border-constraint="North"/>
                         <properties/>
-                      </component>
-                      <component id="1e18e" class="javax.swing.JLabel" binding="beerImage">
-                        <constraints border-constraint="West"/>
-                        <properties>
-                          <text value=""/>
-                        </properties>
-                      </component>
+                        <border type="none"/>
+                        <children>
+                          <component id="f4280" class="javax.swing.JTextPane" binding="beerInfo">
+                            <constraints border-constraint="Center"/>
+                            <properties/>
+                          </component>
+                          <component id="d35da" class="javax.swing.JLabel" binding="beerImage">
+                            <constraints border-constraint="West"/>
+                            <properties>
+                              <preferredSize width="200" height="200"/>
+                              <text value="Label"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
                     </children>
                   </grid>
                 </children>

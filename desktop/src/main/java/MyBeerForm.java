@@ -26,7 +26,6 @@ public class MyBeerForm {
     private JPanel reviewPanel;
     private DefaultListModel beerListModel;
     private JTree commentTree;
-    private JButton addCommentButton;
     private JsonArray data;
 
     MyBeerForm() throws FileNotFoundException {
@@ -88,16 +87,17 @@ public class MyBeerForm {
         beerPane.getViewport().add(beerList);
 
         commentTree = new JTree(new DefaultMutableTreeNode("Comments"));
-        reviewPanel.add(commentTree, BorderLayout.SOUTH);
+        reviewPanel.add(commentTree, BorderLayout.CENTER);
         // ==================================================================
 
         // Add components
         JFrame wndFrame = new JFrame();
         wndFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         wndFrame.setIconImage(new ImageIcon("beer.png").getImage());
-        wndFrame.setVisible(true);
-        wndFrame.setMinimumSize(new Dimension(600, 400));
+        wndFrame.setMinimumSize(new Dimension(800, 600));
         wndFrame.add(mainPanel);
+        wndFrame.pack();
+        wndFrame.setVisible(true);
 
         // load beer list (list on left side)
         for(int i=0; i<data.size(); i++) {
@@ -129,8 +129,9 @@ public class MyBeerForm {
         beerImage.setIcon(beerIcon);
 
         // set description
+        String html = "<html><body style='width: %1spx'>%1s";
         beerInfo.setContentType(beerObject.getString("description_type"));
-        beerInfo.setText(beerObject.getString("description"));
+        beerInfo.setText(String.format(html, 300, beerObject.getString("description")));
 
         // set comments
         DefaultTreeModel model = (DefaultTreeModel) commentTree.getModel();
@@ -152,7 +153,7 @@ public class MyBeerForm {
     private DefaultMutableTreeNode loadComments(JsonObject jsonRoot) {
         String comment = String.format("%s: %s", jsonRoot.getString("user"), jsonRoot.getString("comment"));
         String html = "<html><body style='width: %1spx'>%1s";
-        DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(String.format(html, 200, comment));
+        DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(String.format(html, 300, comment));
 
         JsonArray replies = jsonRoot.getJsonArray("replies");
         for(int i=0; i<replies.size(); i++) {

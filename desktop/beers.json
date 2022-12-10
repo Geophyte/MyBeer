@@ -4,28 +4,28 @@
         "score": 4.5,
         "photo": "beer.png",
         "description_type": "text/html",
-        "description": "<html><body><h1>Some beer info</h1><br><p>Some paragraph about it</p></body></html>",
+        "description": "<h1>Brewery X's New IPA</h1><p>Brewery X's new IPA is a bold and complex beer that is sure to satisfy hop-lovers. The hop flavor is bold and well-balanced, with a refreshing tropical aroma. The beer has a smooth, velvety mouthfeel and a satisfying bitterness in the aftertaste. It's perfect for enjoying on a hot summer day or with a hearty meal.</p><p>This IPA is available in 6-packs and on draft at select bars and restaurants. Give it a try and experience the deliciousness for yourself!</p><p><strong>Availability:</strong> 6-packs and draft at select bars and restaurants</p><p><strong>ABV:</strong> 7.5%</p><p><strong>IBU:</strong> 65</p>",
         "comments": [
             {
                 "user": "User1",
-                "comment": "Beer not good. Try better",
+                "comment": "I just tried the new IPA from Brewery X and it was amazing! The hop flavor was spot on and the aroma was incredibly tropical and fruity.",
                 "replies": [
                     {
                         "user": "User2",
-                        "comment": "No U",
+                        "comment": "I agree, I tried that IPA too and it was one of the best I've ever had. The balance of flavors was perfect and it had a smooth, velvety mouthfeel.",
                         "replies": []
                     },
                     {
                         "user": "User3",
-                        "comment": ":^(",
+                        "comment": "I tried it as well and I wasn't as impressed. I found the hop flavor to be too overpowering and it left a bit of a bitter aftertaste for me.",
                         "replies": [
                             {
                                 "user": "User1",
-                                "comment": "?",
+                                "comment": "I can see how that would be a matter of personal preference. For me, the hop flavor was just right and I loved the tropical aroma. But everyone's tastes are different, so it's great that Brewery X offers a variety of beers to suit different palates.",
                                 "replies": [
                                     {
-                                        "user": "User3",
-                                        "comment": "¯\\_(ツ)_/¯",
+                                        "user": "User2",
+                                        "comment": "Absolutely. And I think it's important to keep an open mind and try new things. You never know, you might discover a new favorite beer!",
                                         "replies": []
                                     }
                                 ]
@@ -36,16 +36,28 @@
             },
             {
                 "user": "User4",
-                "comment": "Beer good 👍",
+                "comment": "I just tried the new IPA from Brewery X and I was blown away by how delicious it was. The hop flavor was bold and complex, and the aroma was so fresh and inviting. It's definitely one of the best IPAs I've ever had.",
                 "replies": [
                     {
                         "user": "User1",
-                        "comment": ">:(",
+                        "comment": "I'm glad you enjoyed it! I tried it last week and I completely agree with you. The hop flavor was so well-balanced and the aroma was amazing. It's definitely worth trying if you're a fan of hoppy beers.",
                         "replies": [
                             {
-                                "user": "User1",
-                                "comment": "No NOT good",
-                                "replies": []
+                                "user": "User6",
+                                "comment": "I tried it as well and I wasn't as impressed. I found the hop flavor to be too intense and it overpowered the other flavors in the beer. But like you said, taste is subjective and what one person loves, another might not enjoy as much.",
+                                "replies": [
+                                    {
+                                        "user": "User4",
+                                        "comment": "That's true, everyone's tastes are different. But I would definitely recommend giving this IPA a try if you're curious. Brewery X is known for making high-quality beers, so it's worth trying even if you're not a huge fan of hoppy beers.",
+                                        "replies": [
+                                            {
+                                                "user": "User1",
+                                                "comment": "Absolutely. And it's always good to try new things and expand your horizons. You never know, you might discover a new favorite beer!",
+                                                "replies": []
+                                            }
+                                        ]
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -58,20 +70,26 @@
         "score": 8.5,
         "photo": "beer.png",
         "description_type": "text/html",
-        "description": "<html><body><h1>Some beer info</h1><br><p>Some paragraph about it</p></body></html>",
+        "description": "<h1>Brewery X's Czech Pilsner</h1><p>Brewery X's new Czech Pilsner is a crisp and refreshing beer that is perfect for any occasion. The flavor is clean and well-balanced, with a subtle hoppy bitterness and a crisp, dry finish. It has a light, golden color and a delicate aroma. This Pilsner is brewed using traditional Czech techniques and ingredients, making it an authentic and delicious representation of the classic style. Try it on its own or with a variety of foods to experience the deliciousness for yourself!</p><p><strong>Availability:</strong> 6-packs and draft at select bars and restaurants</p><p><strong>ABV:</strong> 4.5%</p><p><strong>IBU:</strong> 35</p>",
         "comments": [
             {
                 "user": "User1",
-                "comment": "I like it 5/10",
+                "comment": "I just tried the new Czech Pilsner from Brewery X and I would give it a 9/10. The flavor was crisp and refreshing, with a subtle hoppy bitterness. It's the perfect beer for a hot summer day.",
                 "replies": [
                     {
                         "user": "User2",
-                        "comment": "Why 5/10?",
+                        "comment": "I tried it as well and I would give it a 7/10. I found the flavor to be a bit too mild and it didn't have the depth and complexity that I look for in a good Pilsner. I also thought the aroma was a bit lacking.",
                         "replies": [
                             {
-                                "user": "User2",
-                                "comment": "¯\\_(ツ)_/¯",
-                                "replies": []
+                                "user": "User1",
+                                "comment": "I can see why you would give it a lower rating. But for me, the simplicity and refreshment of the flavor was exactly what I was looking for in a Pilsner. I also enjoyed the subtle hop bitterness and the light, crisp mouthfeel.",
+                                "replies": [
+                                    {
+                                        "user": "User2",
+                                        "comment": "That's true, but for me, the flavor was too one-dimensional and it didn't have the complexity and character that I expect from a Czech Pilsner. I also thought the aroma was weak and didn't add much to the overall experience. But like you said, it's all about personal preference.",
+                                        "replies": []
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -88,7 +106,7 @@
         "comments": [
             {
                 "user": "User3",
-                "comment": "<html>Pours a chestnut brown with copper edges and a finger of beige head. The nose is straight up sweet maple syrup, but it's the fake Log Cabin kind. Vanilla and maple syrup flavor notes are upfront. The finish has a blast of cinnamon that overwhelms everything in it's wake.<p><p>I'm not getting any tangible bourbon notes.<p><p>I'm a huge fanboy of Backwoods, but I can't say the same for this offering. I'm going to cellar my other three bottles and hope this cinnamon bomb quiets down a bit.</html>",
+                "comment": "<html><p>Pours a chestnut brown with copper edges and a finger of beige head. The nose is straight up sweet maple syrup, but it's the fake Log Cabin kind. Vanilla and maple syrup flavor notes are upfront. The finish has a blast of cinnamon that overwhelms everything in it's wake.<p><p>I'm not getting any tangible bourbon notes.</p><p>I'm a huge fanboy of Backwoods, but I can't say the same for this offering. I'm going to cellar my other three bottles and hope this cinnamon bomb quiets down a bit.</p></html>",
                 "replies": [
                     {
                         "user": "User1",
@@ -108,11 +126,11 @@
         "comments": [
             {
                 "user": "User2",
-                "comment": "meh",
+                "comment": "I recently tried the Polish Amber Lager from Brewery X and I was blown away by how delicious it was. The flavor was rich and malty, with a subtle sweetness and a nice hoppy bitterness. It had a smooth, velvety mouthfeel and a beautiful amber color. I would definitely recommend giving this beer a try if you're a fan of amber lagers.",
                 "replies": [
                     {
                         "user": "User4",
-                        "comment": ":(",
+                        "comment": "😍❤️🍺",
                         "replies": []
                     }
                 ]
@@ -128,15 +146,15 @@
         "comments": [
             {
                 "user": "User6",
-                "comment": "Don't bother",
+                "comment": "I just tried the new IPA from Brewery X and I was disappointed. The hop flavor was overly bitter and the aroma was off-putting. I wouldn't recommend this beer to anyone.",
                 "replies": [
                     {
                         "user": "User5",
-                        "comment": "Agree",
+                        "comment": "I tried it as well and I completely agree. The hop flavor was too intense and it overpowered the other flavors in the beer. I also thought the aroma was unappealing and it left a bad aftertaste in my mouth.",
                         "replies": [
                             {
-                                "user": "User6",
-                                "comment": ":)",
+                                "user": "User7",
+                                "comment": "I had the same experience. The hop flavor was too much for me and it detracted from the overall enjoyment of the beer. I also thought the aroma was lacking and didn't add anything to the flavor. Overall, I would not recommend this beer.",
                                 "replies": []
                             }
                         ]
