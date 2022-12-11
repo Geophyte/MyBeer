@@ -97,4 +97,6 @@ API:
 Podobnie dla endpointów */categories*, */reviews*, */comments*.
 
 ## Instalacja aplikacji okienkowej
-    
+
+Do uruchomienia naszej aplikacji wykorzystywaliśmy Intellij IDEA. 
+Po pobraniu repozytorium należy zmienić branch na desktop oraz uruchomić katalog *desktop*. jako projekt. Kolejnym krokiem jest dodanie konfiguracji Maven. Po wybraniu domyślnej konfiguracji Mavena należy przejść do pliku *src/main/java/Main.java* oraz uruchomić go z poziomu edytora kodu.
