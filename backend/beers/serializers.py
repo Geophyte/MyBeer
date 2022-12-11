@@ -10,11 +10,13 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class BeerSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
     class Meta:
         model = Beer
         fields = ('id', 'name', 'description', 'category', 'created_by', 'image_url', 'active', 'rating')
+
+
+class BeerReadSerializer(BeerSerializer):
+    category = CategorySerializer(read_only=True)
 
 
 class ReviewSerializer(serializers.ModelSerializer):
