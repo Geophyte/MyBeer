@@ -13,84 +13,88 @@ przeglądać recenzje, filtrować produkty według kategorii, oceny, etc. Zalogo
 recenzje oraz je komentować. Będą mogli także zaproponować dodanie do bazy danych nowego produktu. Wybór ten będzie
 musiał być zatwierdzony przez administratora systemu.
 
-## Struktura systemu
+# Struktura projektu
 
-* Ignacy Dąbkowski
-* Jakub Jażdżyk
-* Ireneusz Okniński
+Aplikacja serwerowa znajduje się w branchu *backend*.
+Aplikacja okienkowa znajduje się w branchu *desktop*.
 
-### Aplikacja serwerowa (backend)
+# Instalacja aplikacji serwerowej
 
-(Jakub Jażdżyk, Ireneusz Okniński)
+Stworzenie obrazu Dockera:
 
-* obsługa bazy danych
-    * piwa
-    * recenzje
-    * oceny
-    * komentarze
-    * użytkownicy
-* autoryzacja użytkowników
-* REST API
-* generowanie wykresów ocen etc.
-* wdrożenie na serwer
+    cd backend    
+    docker build --tag backend .
 
-Proponowana technologia: Django
+Uruchomienie aplikacji:
 
-### Testy
+    docker run --publish 8000:8000 backend
 
-(Ignacy Dąbkowski)
+Dostęp do aplikacji jest możliwy na localhost
 
-* jednostkowe
-* integracyjne
+    http://127.0.0.1:8000/
 
-### Aplikacja desktopowa (webowa)
+lub poprzez dowolne narzędzie umożliwiające wykonywanie requestów. Podczas testów API korzystaliśmy z Pythona i
+biblioteki requests.
 
-* Interfejs użytkownika (Ignacy Dąbkowski)
-    * Lista piw
-        * Wyszukiwanie po nazwie
-        * Sortowanie
-        * Filtrowanie
-    * Wyświetlanie pojedynczego piwa
-        * Dane
-        * Recenzje (oceny)
-            * Wyświetlanie komentarzy
-            * Dodawanie komentarzy
-        * Dodawanie recenzji
-    * Dodawanie nowego piwa
-    * Logowanie użytkownika
-    * Rejestracja użytkownika
+Aplikacja administratora:
 
-* Interakcja z API (Jakub Jażdżyk)
-    * Tworzenie danych
-        * Dodawanie piwa
-        * Dodawanie recenzji
-        * Dodawanie komentarzy
-        * Rejestracja użytkownika
-    * Pobieranie danych
-        * Lista piw
-        * Jedno piwo
-        * Recenzje
-        * Komentarze
-        * Dane użytkownika
-    * Edytowanie danych
-        * Edytowanie recenzji
-        * Edytowanie komentarza
-    * Usuwanie danych
-        * Usuwanie komentarzy
-        * Usuwanie recenzji
+    http://127.0.0.1:8000/admin/
 
-Proponowana technologia: Java (Swing)
+API:
 
-### Aplikacja administratora
+    http://127.0.0.1:8000/api/v1/
 
-(Ireneusz Okniński)
+# Przykłady zapytań do API
 
-* Potwierdzanie dodania nowego produktu do bazy danych
-* Zarządzanie użytkownikami
-* Moderowanie recenzji i komentarzy
+## Rejestracja
 
-Proponowana technologia: Django + HTML + CCS + JavaScript
+    register = "http://127.0.0.1:8000/api/v1/auth/register"
+    post(register, {'username': 'foo',
+                    'password': 'bar',
+                    'email': 'foo@bar.com',
+                    'first_name': 'foo',
+                    'last_name': 'bar'})
 
-### Makieta głownego interfejsu
+## Logowanie
 
-![alt text](interfejs.png "")
+    login = "http://127.0.0.1:8000/api/v1/auth/login"
+    token = post(login, {"username": "foo",
+                        "password": "bar"}).json()['token']
+
+## Dane użytkownika
+
+    user_data = "http://127.0.0.1:8000/api/v1/auth/user"
+    get(user_data, headers={"Authorization": f"Token {token}"})
+
+## Wylogowanie
+
+    logout = "http://127.0.0.1:8000/api/v1/auth/logout"
+    post(logout, headers={"Authorization": f"Token {token}"})
+
+## Lista piw
+
+    url = "http://127.0.0.1:8000/api/v1/beers/"
+    get(url, headers={"Authorization": f"Token {token}"})
+
+## Dane piwo
+
+    url = "http://127.0.0.1:8000/api/v1/beers/1/"
+    get(url, headers={"Authorization": f"Token {token}"})
+
+## Piwa z danej kategorii
+
+    url = "http://127.0.0.1:8000/api/v1/beers/?category=IPA"
+    get(url, headers={"Authorization": f"Token {token}"})
+
+## Dodaj piwo
+    url = "http://127.0.0.1:8000/api/v1/beers/"
+    new_beer = {
+        "name": "Heineken",
+        "description": "Very interesting and long description.",
+        "category": 5}
+    post(url, new_beer, headers={"Authorization": f"Token {token}"})
+
+Podobnie dla endpointów */categories*, */reviews*, */comments*.
+
+## Instalacja aplikacji okienkowej
+    
