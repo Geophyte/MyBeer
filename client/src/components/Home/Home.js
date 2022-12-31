@@ -7,8 +7,7 @@ import Posts from '../Posts/Posts';
 import Form from '../Form/Form';
 import { useDispatch } from 'react-redux';
 import { getPosts, getPostBySearch } from '../../actions/posts';
-import { Paginate } from '../Pagination';
-import { Pagination } from '@mui/material';
+import { Paginate } from '../Paginate';
 import { ClassNames } from '@emotion/react';
 
 import useStyles from './styles';
@@ -28,13 +27,9 @@ const Home = () => {
     const [search, setSearch] = useState('');
     const [tags, setTags] = useState([]);
 
-    useEffect(() => {
-        dispatch(getPosts());
-    }, [currentId, dispatch]);
-
     const searchPost = () => {
-        if(search.trim() || tags) {
-            dispatch(getPostBySearch({search, tags: tags.join(',') }));
+        if (search.trim() || tags) {
+            dispatch(getPostBySearch({ search, tags: tags.join(',') }));
             navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
         } else {
             navigate('/');
@@ -72,7 +67,7 @@ const Home = () => {
                                     onChange={(e) => { setSearch(e.target.value) }}
                                 />
                                 <ChipInput
-                                    styles={{ margin: '10px 0'}}
+                                    styles={{ margin: '10px 0' }}
                                     value={tags}
                                     onAdd={handleAdd}
                                     onDelete={handleDelete}
@@ -82,9 +77,11 @@ const Home = () => {
                                 <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
-                            <Paper elevation={6} >
-                                <Pagination />
-                            </Paper>
+                            {(!searchQuery && !tags.length) && (
+                                <Paper elevation={6} className={classes.pagination} >
+                                    <Paginate page={page} />
+                                </Paper>
+                            )}
                         </Grid>
                     </Grid>
                 </Container>
