@@ -1,0 +1,37 @@
+[
+    {
+        "login": "User1",
+        "password": "1234",
+        "image": "user.png"
+    },
+    {
+        "login": "User2",
+        "password": "2345",
+        "image": "user.png"
+    },
+    {
+        "login": "User3",
+        "password": "3456",
+        "image": "user.png"
+    },
+    {
+        "login": "User4",
+        "password": "4567",
+        "image": "user.png"
+    },
+    {
+        "login": "User5",
+        "password": "5678",
+        "image": "user.png"
+    },
+    {
+        "login": "User6",
+        "password": "6789",
+        "image": "user.png"
+    },
+    {
+        "login": "User7",
+        "password": "7890",
+        "image": "user.png"
+    }
+]

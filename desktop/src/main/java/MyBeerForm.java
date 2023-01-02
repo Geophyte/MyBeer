@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import javax.json.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
 public class MyBeerForm {
@@ -28,7 +29,7 @@ public class MyBeerForm {
     private JTree commentTree;
     private JsonArray data;
 
-    MyBeerForm() throws FileNotFoundException {
+    MyBeerForm(String login) throws FileNotFoundException {
         // read JSON file
         InputStream fis = new FileInputStream("beers.json");
         JsonReader reader = Json.createReader(fis);
@@ -53,27 +54,36 @@ public class MyBeerForm {
         });
         searchField.addActionListener(e->System.out.printf("Searching for %s!%n", searchField.getText()));
 
-        ImageIcon searchIcon = new ImageIcon(getScaledImage(new ImageIcon("loupe.png").getImage(), 30, 30));
+        ImageIcon searchIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("loupe.png").getImage(), 30, 30));
         searchButton.addActionListener(e->System.out.printf("Searching for %s!%n", searchField.getText()));
         searchButton.setIcon(searchIcon);
 
-        ImageIcon filterIcon = new ImageIcon(getScaledImage(new ImageIcon("filter.png").getImage(), 30, 30));
+        ImageIcon filterIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("filter.png").getImage(), 30, 30));
         filterButton.addActionListener(e->System.out.println("Opening filter window"));
         filterButton.setIcon(filterIcon);
         // ==================================================================
 
         // =========================== USER SPACE ===========================
-        ImageIcon userIcon = new ImageIcon(getScaledImage(new ImageIcon("user.png").getImage(), 30, 30));
-        userButton.addActionListener(e->System.out.println("Displaying user data"));
+        ImageIcon userIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("user.png").getImage(), 30, 30));
+        userButton.addActionListener(e->{
+            System.out.println("Displaying User Data");
+            try {
+                new UserWindow(login);
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
         userButton.setIcon(userIcon);
+
+        userName.setText(login);
         // ==================================================================
 
         // =========================== BEER PAGE ============================
-        ImageIcon beerIcon = new ImageIcon(getScaledImage(new ImageIcon("beer.png").getImage(), 200, 200));
+        ImageIcon beerIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("beer.png").getImage(), 200, 200));
         beerImage.setIcon(beerIcon);
 
-        beerListModel = new DefaultListModel();
-        JList beerList = new JList(beerListModel);
+        beerListModel = new DefaultListModel<CommentForm>();
+        JList beerList = new JList<CommentForm>(beerListModel);
         beerList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -87,6 +97,9 @@ public class MyBeerForm {
         beerPane.getViewport().add(beerList);
 
         commentTree = new JTree(new DefaultMutableTreeNode("Comments"));
+        commentTree.setCellRenderer(new CommentTreeCellRenderer());
+        commentTree.setCellEditor(new CommentTreeCellEditor(commentTree, (DefaultTreeCellRenderer) commentTree.getCellRenderer()));
+        commentTree.setEditable(true);
         reviewPanel.add(commentTree, BorderLayout.CENTER);
         // ==================================================================
 
@@ -109,23 +122,12 @@ public class MyBeerForm {
         loadBeerPage(0, data);
     }
 
-    private Image getScaledImage(Image srcImg, int w, int h){
-        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = resizedImg.createGraphics();
-
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(srcImg, 0, 0, w, h, null);
-        g2.dispose();
-
-        return resizedImg;
-    }
-
     public void loadBeerPage(int idx, JsonArray data) {
         JsonObject beerObject = data.getJsonObject(idx);
         System.out.printf("Loading page %d%n", idx);
 
         // set photo
-        ImageIcon beerIcon = new ImageIcon(getScaledImage(new ImageIcon(beerObject.getString("photo")).getImage(), 200, 200));
+        ImageIcon beerIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon(beerObject.getString("photo")).getImage(), 200, 200));
         beerImage.setIcon(beerIcon);
 
         // set description
@@ -151,9 +153,11 @@ public class MyBeerForm {
     }
 
     private DefaultMutableTreeNode loadComments(JsonObject jsonRoot) {
-        String comment = String.format("%s: %s", jsonRoot.getString("user"), jsonRoot.getString("comment"));
-        String html = "<html><body style='width: %1spx'>%1s";
-        DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(String.format(html, 300, comment));
+        String author = jsonRoot.getString("user");
+        String date = "2023-01-02 21:22:34";
+        ImageIcon authorsPic = new ImageIcon(Utility.getScaledImage(new ImageIcon("beer.png").getImage(), 20, 20));
+        String comment = String.format("<html><body style='width: %1spx'>%1s", 300, jsonRoot.getString("comment")) ;
+        DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode(new CommentForm(author, date, authorsPic, comment));
 
         JsonArray replies = jsonRoot.getJsonArray("replies");
         for(int i=0; i<replies.size(); i++) {
@@ -163,3 +167,4 @@ public class MyBeerForm {
         return newRoot;
     }
 }
+
