@@ -12,7 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class BeerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Beer
-        fields = ('id', 'name', 'description', 'category', 'created_by', 'image_url', 'active', 'rating')
+        fields = ('id', 'name', 'description', 'category', 'created_by', 'image_url', 'rating')
 
 
 class BeerReadSerializer(BeerSerializer):
@@ -28,7 +28,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         review = Review(
             title=validated_data['title'],
             content=validated_data['content'],
-            active=True,
             rating=validated_data['rating'],
             author=self.context['request'].user
         )
@@ -45,8 +44,7 @@ class CommentSerializer(serializers.ModelSerializer):
         comment = Comment(
             author=self.context['request'].user,
             review=validated_data['review'],
-            content=validated_data['content'],
-            active=True
+            content=validated_data['content']
         )
         comment.save()
         return comment

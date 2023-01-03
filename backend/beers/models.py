@@ -11,7 +11,7 @@ def upload_to(instance, filename):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50, null=False)
+    name = models.CharField(max_length=50, unique=True, null=False)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -26,8 +26,8 @@ class Beer(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=1)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1, editable=False)
-    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
-    active = models.BooleanField(default=False)
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True, default=None)
+    # active = models.BooleanField(default=False)
     rating = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True, editable=False)
 
     class Meta:
@@ -42,32 +42,41 @@ class Review(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1, editable=False)
     beer = models.ForeignKey(Beer, on_delete=models.CASCADE)
-    active = models.BooleanField(null=False, default=False)
+    # active = models.BooleanField(null=False, default=False)
     rating = models.IntegerField(null=False, validators=[MinValueValidator(1), MaxValueValidator(10)])
 
     def save(self, *args, **kwargs):
-
         super(Review, self).save(*args, **kwargs)
-        beer_reviews = Review.objects.filter(beer=self.beer.pk, active=True)
+        reviews = Review.objects.filter(beer=self.beer.pk)
         beer = Beer.objects.get(pk=self.beer.pk)
-        if beer_reviews:
-            new_rating = statistics.mean([review.rating for review in beer_reviews])
-            beer.rating = new_rating
+        if reviews:
+            beer.rating = statistics.mean([review.rating for review in reviews])
         else:
             beer.rating = self.rating
         beer.save()
 
     def delete(self, *args, **kwargs):
         beer = Beer.objects.get(pk=self.beer.pk)
-        beer_reviews = Review.objects.filter(beer=self.beer.pk).exclude(pk=self.pk)
         super(Review, self).delete(*args, **kwargs)
-        if beer_reviews:
-            new_rating = statistics.mean([review.rating for review in beer_reviews if review.active])
-            beer.rating = new_rating
+        reviews = Review.objects.filter(beer=beer.pk).exclude(pk=self.pk)
 
+        if reviews:
+            beer.rating = statistics.mean([review.rating for review in reviews])
         else:
             beer.rating = None
         beer.save()
+
+    # def delete(self, *args, **kwargs):
+    #     beer = Beer.objects.get(pk=self.beer.pk)
+    #     beer_reviews = Review.objects.filter(beer=self.beer.pk).exclude(pk=self.pk)
+    #     super(Review, self).delete(*args, **kwargs)
+    #     if beer_reviews:
+    #         new_rating = statistics.mean([review.rating for review in beer_reviews])
+    #         beer.rating = new_rating
+    #
+    #     else:
+    #         beer.rating = None
+    #     beer.save()
 
     def __str__(self):
         return self.title
@@ -77,7 +86,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1, editable=False)
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     content = models.TextField()
-    active = models.BooleanField(null=False, default=False)
+    # active = models.BooleanField(null=False, default=False)
 
     def __str__(self):
         return str(self.author) + " comment"
