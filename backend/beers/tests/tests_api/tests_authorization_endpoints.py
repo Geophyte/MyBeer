@@ -46,6 +46,10 @@ class AuthorizationTestCase(APITestCase):
 
         self.assertEqual(self.register_data.get('username'), username)
         self.assertEqual(self.register_data.get('email'), email)
+        self.assertEqual(self.register_data.get(''), email)
+        self.assertEqual(self.register_data.get('email'), email)
+
+
 
     def test_logout(self):
         token = self.client.post(self.login_url, data=self.login_data).json()['token']
