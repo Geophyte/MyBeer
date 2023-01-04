@@ -8,11 +8,12 @@ Aplikacja okienkowa znajduje się w branchu *desktop*.
 Stworzenie obrazu Dockera:
 
     cd backend    
-    docker build --tag backend .
+    docker-compose up
 
-Uruchomienie aplikacji:
+Uruchomienie terminala django:
 
-    docker run --publish 8000:8000 backend
+    docker ps
+    docker exec -it [id_kontenera] bash
 
 Dostęp do aplikacji jest możliwy na localhost
 
