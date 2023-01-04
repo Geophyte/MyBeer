@@ -21,7 +21,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         # return [permissions.AllowAny(),]
-        if self.request.method in ['GET', ]:
+        if self.request.method in ['GET']:
             return [permissions.IsAuthenticated(), ]
         return [permissions.IsAdminUser(), ]
 

@@ -14,6 +14,14 @@ class BeerSerializer(serializers.ModelSerializer):
         model = Beer
         fields = ('id', 'name', 'description', 'category', 'created_by', 'image_url', 'rating')
 
+    def create(self, validated_data):
+        beer = Beer(name=validated_data['name'],
+                    description=validated_data['description'],
+                    category=validated_data['category'],
+                    created_by=self.context['request'].user)
+        beer.save()
+        return beer
+
 
 class BeerReadSerializer(BeerSerializer):
     category = CategorySerializer(read_only=True)
@@ -29,7 +37,8 @@ class ReviewSerializer(serializers.ModelSerializer):
             title=validated_data['title'],
             content=validated_data['content'],
             rating=validated_data['rating'],
-            author=self.context['request'].user
+            author=self.context['request'].user,
+            beer=validated_data['beer']
         )
         review.save()
         return review
