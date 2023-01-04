@@ -1,5 +1,4 @@
 from rest_framework import generics, permissions
-from django.contrib.auth.models import User
 from rest_framework.response import Response
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer, LoginSerializer
@@ -51,7 +50,9 @@ class UserView(generics.RetrieveAPIView):
                     'user_info': {
                         'id': user.id,
                         'username': user.username,
-                        'email': user.email
+                        'email': user.email,
+                        'first_name': user.first_name,
+                        'last_name': user.last_name
                     }
                 }
             )

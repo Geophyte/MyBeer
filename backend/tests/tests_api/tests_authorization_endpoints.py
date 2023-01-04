@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 
 
@@ -41,18 +40,19 @@ class AuthorizationTestCase(APITestCase):
 
         user_data = response.data.get('user_info')
 
+        user_id = user_data.get('id')
         username = user_data.get('username')
         email = user_data.get('email')
+        first_name = user_data.get('first_name')
+        last_name = user_data.get('last_name')
 
+        self.assertEqual(1, user_id)
         self.assertEqual(self.register_data.get('username'), username)
         self.assertEqual(self.register_data.get('email'), email)
-        self.assertEqual(self.register_data.get(''), email)
-        self.assertEqual(self.register_data.get('email'), email)
-
-
+        self.assertEqual(self.register_data.get('first_name'), first_name)
+        self.assertEqual(self.register_data.get('last_name'), last_name)
 
     def test_logout(self):
         token = self.client.post(self.login_url, data=self.login_data).json()['token']
         response = self.client.post(self.logout_url, **{"HTTP_AUTHORIZATION": f"Token {token}"})
         self.assertEqual(response.status_code, 204)
-
