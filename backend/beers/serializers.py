@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from beers.models import Beer, Review, Comment, Category
 
 
@@ -22,6 +21,12 @@ class BeerSerializer(serializers.ModelSerializer):
         beer.save()
         return beer
 
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.instance:
+            fields['created_by'].read_only = True
+        return fields
+
 
 class BeerReadSerializer(BeerSerializer):
     category = CategorySerializer(read_only=True)
@@ -43,6 +48,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         review.save()
         return review
 
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.instance:
+            fields['author'].read_only = True
+            fields['beer'].read_only = True
+        return fields
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -57,3 +69,10 @@ class CommentSerializer(serializers.ModelSerializer):
         )
         comment.save()
         return comment
+
+    def get_fields(self):
+        fields = super().get_fields()
+        if self.instance:
+            fields['author'].read_only = True
+            fields['review'].read_only = True
+        return fields

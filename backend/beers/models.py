@@ -86,6 +86,7 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, default=1, editable=False)
     review = models.ForeignKey(Review, on_delete=models.CASCADE)
     content = models.TextField()
+
     # active = models.BooleanField(null=False, default=False)
 
     def __str__(self):

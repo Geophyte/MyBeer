@@ -192,7 +192,6 @@ class AuthenticatedUserTestCase(APITestCase):
 
     def test_beer_list(self):
         response = self.client.get('/api/v1/beers/', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
-        print(response.data)
         self.assertEqual(response.status_code, 200)
 
     def test_beer_detail(self):
@@ -270,3 +269,132 @@ class AuthenticatedUserTestCase(APITestCase):
                        "review": self.review_1.id}
         response = self.client.post('/api/v1/comments/', new_comment, **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
         self.assertEqual(response.status_code, 201)
+
+    def test_delete_category(self):
+        category_id = self.category_1.id
+        response = self.client.delete(f'/api/v1/categories/{category_id}/',
+                                      **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_beer(self):
+        beer_id = self.beer_1.id
+        response = self.client.delete(f'/api/v1/beers/{beer_id}/', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_review(self):
+        review_id = self.review_1.id
+        response = self.client.delete(f'/api/v1/reviews/{review_id}/', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_delete_comment(self):
+        comment_id = self.comment_1.id
+        response = self.client.delete(f'/api/v1/comments/{comment_id}/',
+                                      **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_put_category(self):
+        new_category = {
+            "name": "new_name"}
+        category_id = self.category_1.id
+        response = self.client.put(f'/api/v1/categories/{category_id}/', new_category,
+                                   **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_put_beer(self):
+        new_beer = {
+            "name": "new_name",
+            "description": "new_desc",
+            "category": self.category_2.id}
+        beer_id = self.beer_1.id
+        response = self.client.put(f'/api/v1/beers/{beer_id}/', new_beer,
+                                   **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_put_review(self):
+        new_review = {"title": "new_title",
+                      "content": 'new_content',
+                      "beer": self.beer_1.id,
+                      "rating": 1}
+        review_id = self.review_1.id
+        response = self.client.put(f'/api/v1/reviews/{review_id}/', new_review,
+                                   **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_put_comment(self):
+        new_comment = {"content": "new_content",
+                       "review": self.review_1.id}
+        comment_id = self.comment_1.id
+        response = self.client.put(f'/api/v1/comments/{comment_id}/', new_comment,
+                                   **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_put_review_by_its_author(self):
+        token = self.client.post(self.login_url, data={'username': 'user_1',
+                                                       'password': 'password'}).json()['token']
+        new_review = {"title": "new_title",
+                      "content": 'new_content',
+                      "rating": 1}
+        review_id = self.review_1.id
+        response = self.client.put(f'/api/v1/reviews/{review_id}/', new_review,
+                                   **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        beer_id = response.data.get('beer')
+        self.assertEqual(beer_id, self.beer_1.id)
+
+    def test_put_comment_by_its_author(self):
+        token = self.client.post(self.login_url, data={'username': 'user_1',
+                                                       'password': 'password'}).json()['token']
+        new_comment = {"content": 'new_content'}
+        comment_id = self.comment_1.id
+        response = self.client.put(f'/api/v1/comments/{comment_id}/', new_comment,
+                                   **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        review_id = response.data.get('review')
+        self.assertEqual(review_id, self.review_2.id)
+
+    def test_delete_review_by_its_author(self):
+        token = self.client.post(self.login_url, data={'username': 'user_1',
+                                                       'password': 'password'}).json()['token']
+        review_id = self.review_1.id
+        response = self.client.delete(f'/api/v1/reviews/{review_id}/', **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_delete_comment_by_its_author(self):
+        token = self.client.post(self.login_url, data={'username': 'user_1',
+                                                       'password': 'password'}).json()['token']
+        comment_id = self.comment_1.id
+        response = self.client.delete(f'/api/v1/comments/{comment_id}/',
+                                      **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_try_to_change_review_parent_beer(self):
+        token = self.client.post(self.login_url, data={'username': 'user_1',
+                                                       'password': 'password'}).json()['token']
+        new_review = {"title": "new_title",
+                      "beer": self.beer_2,
+                      "content": 'new_content',
+                      "rating": 1}
+        review_id = self.review_1.id
+        response = self.client.put(f'/api/v1/reviews/{review_id}/', new_review,
+                                   **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        beer_id = response.data.get('beer')
+        self.assertNotEqual(beer_id, self.beer_2.id)
+        self.assertEqual(beer_id, self.beer_1.id)
+
+    def test_try_to_change_comment_parent_review(self):
+        token = self.client.post(self.login_url, data={'username': 'user_1',
+                                                       'password': 'password'}).json()['token']
+        new_comment = {"content": "new_content",
+                       "review": self.review_1}
+        comment_id = self.comment_1.id
+        response = self.client.put(f'/api/v1/comments/{comment_id}/', new_comment,
+                                   **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        review_id = response.data.get('review')
+        self.assertNotEqual(review_id, self.review_1.id)
+        self.assertEqual(review_id, self.review_2.id)
