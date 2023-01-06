@@ -1,13 +1,13 @@
 import statistics
-
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.template.defaultfilters import slugify
 
 
 def upload_to(instance, filename):
-    return 'images/{filename}'.format(filename=filename)
+    f_name, f_type = filename.split('.')
+    f_hash = hash(f_name)
+    return 'images/{filename}'.format(filename=f"{f_hash}.{f_type}")
 
 
 class Category(models.Model):
