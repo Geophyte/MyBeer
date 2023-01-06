@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react'
 import useStyles from './styles';
 import decode from 'jwt-decode';
-import hintally from '../../images/hintally.png'
+import beer from '../../images/beer.png'
 import { useDispatch } from 'react-redux';
 
 const Navbar = () => {
@@ -36,8 +36,8 @@ const Navbar = () => {
         <div>
             <AppBar className={classes.appBar} position="static" color="inherit">
                 <div className={classes.brandContainer}>
-                    <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">XDXD</Typography>
-                    <img className={classes.image} src={hintally} alt="memories" height="60" />
+                    <Typography component={Link} to="/" className={classes.heading} variant="h2" align="center">MyBeer</Typography>
+                    <img className={classes.image} src={beer} alt="memories" height="60" />
                 </div>
                 <Toolbar className={classes.toolbar}>
                     {user ? (
