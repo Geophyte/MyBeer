@@ -9,6 +9,7 @@ import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@
 import { useDispatch } from 'react-redux';
 
 import { deleteBeer, likeBeer } from "../../../actions/beers";
+import { Link } from "@material-ui/core";
 
 
 const Beer = ({ beer, setCurrentId }) => {
@@ -33,12 +34,12 @@ const Beer = ({ beer, setCurrentId }) => {
         <Card className={classes.card} raised elevation={6}>
             <CardMedia className={classes.media} image={beer.selectedFile} title={beer.title} component='img' />
             <div className={classes.overlay}>
-                <Typography variant="h6">{beer.name}</Typography>
-                <Typography variant="body2">{moment(beer.createdAt).fromNow()}</Typography>
+                <Typography variant="h6" style={{ color: 'black' }}>{beer.name}</Typography>
+                <Typography variant="body2" style={{ color: 'black' }}>{moment(beer.createdAt).fromNow()}</Typography>
             </div>
             {(user?.result?.googleId === beer?.creator || user?.result?._id === beer?.creator) && (
                 <div className={classes.overlay2}>
-                    <Button onClick={() => setCurrentId(beer._id)} style={{ color: 'white' }} size="small">
+                    <Button onClick={() => setCurrentId(beer._id)} style={{ color: 'primary' }} size="small">
                         <MoreHorizIcon fontSize="default" />
                     </Button>
                 </div>
@@ -46,7 +47,13 @@ const Beer = ({ beer, setCurrentId }) => {
             <div className={classes.details}>
                 <Typography variant="body2" color="textSecondary">{beer.categories.map((category) => `#${category} `)}</Typography>
             </div>
-            <Typography className={classes.title} variant="h5" gutterBottom>{beer.title}</Typography>
+
+            <Typography className={classes.title}  gutterBottom>
+                <Link variant="h5" underline="none" color="inherit" onClick={()=>{}} tabIndex={0} component="button">
+                    {beer.title}
+                </Link>
+            </Typography>
+
             <CardContent>
                 <Typography variant="h5" color="textSecondary" component="p">{beer.message}</Typography>
             </CardContent>

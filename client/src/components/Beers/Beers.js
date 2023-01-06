@@ -16,7 +16,7 @@ const Beers = ({ setCurrentId }) => {
         isLoading ? <CircularProgress /> : (
             <Grid className={classes.container} container alignItems="stretch" spacing={3}>
                 {beers.map((beer) => (
-                        <Grid key={beer._id} item xs={12} sm={12} md={6} lg={3}>
+                        <Grid key={beer._id} item xs={12} sm={12} md={12} lg={12}>
                             <Beer beer={beer} setCurrentId={setCurrentId} />
                         </Grid>
                     ))}

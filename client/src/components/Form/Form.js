@@ -48,7 +48,7 @@ const Form = ({ currentId, setCurrentId }) => {
                 <Typography variant="h6">{currentId ? 'Editing' : 'Adding'} a Beer</Typography>
                 <TextField name="name" variant="outlined" label="Name" fullWidth value={beerData.title} onChange={(e) => setBeerData({ ...beerData, title: e.target.value })} />
                 <TextField name="description" variant="outlined" label="Description" fullWidth value={beerData.message} onChange={(e) => setBeerData({ ...beerData, message: e.target.value })} />
-                <TextField name="categories" variant="outlined" label="Categories" fullWidth value={beerData.categories} onChange={(e) => setBeerData({ ...beerData, categories: e.target.value.split(",") })} />
+                <TextField name="categories" variant="outlined" label="Category" fullWidth value={beerData.categories} onChange={(e) => setBeerData({ ...beerData, categories: e.target.value.split(",") })} />
                 <div className={classes.fileInput}>
                     <FileBase
                         type="file"
