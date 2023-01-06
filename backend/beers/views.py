@@ -1,18 +1,31 @@
-from rest_framework import permissions
+from django.contrib.auth.models import User
+from rest_framework import permissions, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets
 from beers.filters import ReviewFilter, CommentFilter, BeerFilter
 from beers.models import Beer, Review, Comment, Category
 from beers.permissions import AuthorPermission
-from beers.serializers import BeerSerializer, BeerReadSerializer, ReviewSerializer, CommentSerializer, CategorySerializer
+from beers.serializers import BeerSerializer, BeerReadSerializer, ReviewSerializer, CommentSerializer, \
+    CategorySerializer
 from django_filters import rest_framework as filters
+
+from users.serializers import UserSerializer
 
 
 @api_view(['GET'])
 def api_overview(request):
     api = {}
     return Response(api)
+
+
+class UserViewSet(mixins.RetrieveModelMixin,
+                  viewsets.GenericViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_permissions(self):
+        return [permissions.IsAuthenticated(), ]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -74,4 +87,3 @@ class CommentViewSet(viewsets.ModelViewSet):
         elif self.request.method in ['PUT', 'DELETE']:
             return [AuthorPermission(), ]
         return [permissions.IsAdminUser(), ]
-

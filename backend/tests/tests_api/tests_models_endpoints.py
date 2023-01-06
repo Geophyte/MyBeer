@@ -141,6 +141,10 @@ class NotAuthenticatedUserTestCase(APITestCase):
         response = self.client.get('/api/v1/comments/?review=1')
         self.assertEqual(response.status_code, 401)
 
+    def test_get_user(self):
+        response = self.client.get(f'/api/v1/users/{self.user_1.id}/')
+        self.assertEqual(response.status_code, 401)
+
     def test_post_category(self):
         new_category = {
             "name": "APA"}
@@ -237,6 +241,11 @@ class AuthenticatedUserTestCase(APITestCase):
     def test_comment_filter_review_id(self):
         response = self.client.get('/api/v1/comments/?review=1', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
         self.assertEqual(response.status_code, 200)
+
+    def test_get_user(self):
+        response = self.client.get(f'/api/v1/users/{self.user_1.id}/', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, 200)
+
 
     def test_post_category(self):
         new_category = {
