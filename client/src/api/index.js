@@ -11,12 +11,12 @@ API.interceptors.request.use((req) => {
     return req;
 });
 
-export const fetchPosts = (page) => API.get(`/posts?page=${page}`);
-export const fetchPostsBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
-export const createPost = (newPost) => API.post('/posts', newPost);
-export const updatePost = (id, updatedPost) => API.patch(`${'/posts'}/${id}`, updatedPost);
-export const deletePost = (id) => API.delete(`${'/posts'}/${id}`);
-export const likePost = (id) => API.patch(`${'/posts'}/${id}/likePost`);
+export const fetchBeers = (page) => API.get(`/posts?page=${page}`);
+export const fetchBeersBySearch = (searchQuery) => API.get(`/posts/search?searchQuery=${searchQuery.search || 'none'}&tags=${searchQuery.tags}`);
+export const createBeer = (newPost) => API.post('/posts', newPost);
+export const updateBeer = (id, updatedPost) => API.patch(`${'/posts'}/${id}`, updatedPost);
+export const deleteBeer = (id) => API.delete(`${'/posts'}/${id}`);
+export const likeBeer = (id) => API.patch(`${'/posts'}/${id}/likePost`);
 
 export const signIn = (formData) => API.post('/users/signin', formData);
 export const signUp = (formData) => API.post('/users/signup', formData);

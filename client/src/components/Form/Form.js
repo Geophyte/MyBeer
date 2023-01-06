@@ -4,11 +4,12 @@ import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from './styles';
-import { createPost, updatePost } from "../../actions/posts";
+import { createBeer, updateBeer } from "../../actions/beers";
 
 const Form = ({ currentId, setCurrentId }) => {
     const [postData, setPostData] = useState({ title: '', message: '', tags:'', selectedFile: '' });
-    const post = useSelector((state) => currentId ? (typeof state.posts instanceof Array ? state.posts.find((p) => p._id ===currentId): state.posts.posts.find((p) => p._id ===currentId)) : null);
+    const post = useSelector((state) => currentId ? (state.posts instanceof Array ? state.posts.find((p) => p._id ===currentId): state.posts.posts.find((p) => p._id ===currentId)) : null);
+    console.log(post)
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -21,9 +22,9 @@ const Form = ({ currentId, setCurrentId }) => {
         e.preventDefault(); //not to get refresh in the browser
 
         if(currentId) {
-            dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
+            dispatch(updateBeer(currentId, { ...postData, name: user?.result?.name }));
         } else {
-            dispatch(createPost({ ...postData, name: user?.result?.name }));
+            dispatch(createBeer({ ...postData, name: user?.result?.name }));
         }
         clear();
     }
@@ -44,9 +45,9 @@ const Form = ({ currentId, setCurrentId }) => {
     return (
         <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit} >
-                <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Task</Typography>
-                <TextField name="title" variant="outlined" label="Title" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
-                <TextField name="message" variant="outlined" label="Message" fullWidth value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
+                <Typography variant="h6">{currentId ? 'Editing' : 'Adding'} a Beer</Typography>
+                <TextField name="name" variant="outlined" label="Name" fullWidth value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })} />
+                <TextField name="description" variant="outlined" label="Description" fullWidth value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })} />
                 <TextField name="tags" variant="outlined" label="Tags" fullWidth value={postData.tags} onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(",") })} />
                 <div className={classes.fileInput}>
                     <FileBase

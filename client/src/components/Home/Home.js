@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ChipInput from 'material-ui-chip-input';
 
-import Posts from '../Posts/Posts';
+import Beers from '../Beers/Beers';
 import Form from '../Form/Form';
 import { useDispatch } from 'react-redux';
-import { getPosts, getPostBySearch } from '../../actions/posts';
+import { getBeers, getBeersBySearch } from '../../actions/beers';
 import { Paginate } from '../Paginate';
 import { ClassNames } from '@emotion/react';
 
@@ -27,9 +27,9 @@ const Home = () => {
     const [search, setSearch] = useState('');
     const [tags, setTags] = useState([]);
 
-    const searchPost = () => {
+    const searchBeer = () => {
         if (search.trim() || tags) {
-            dispatch(getPostBySearch({ search, tags: tags.join(',') }));
+            dispatch(getBeersBySearch({ search, tags: tags.join(',') }));
             navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
         } else {
             navigate('/');
@@ -38,7 +38,7 @@ const Home = () => {
 
     const handleKeyPress = (e) => {
         if (e.keyCode === 13) {
-            searchPost();
+            searchBeer();
         }
     }
 
@@ -52,7 +52,7 @@ const Home = () => {
                 <Container maxWidth="xl">
                     <Grid container justifyContent="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
                         <Grid item xs={12} sm={6} md={9}>
-                            <Posts setCurrentId={setCurrentId} />
+                            <Beers setCurrentId={setCurrentId} />
                         </Grid>
 
                         <Grid item xs={12} sm={6} md={3}>
@@ -74,7 +74,7 @@ const Home = () => {
                                     label="Search Tags"
                                     variant="outlined"
                                 />
-                                <Button onClick={searchPost} className={classes.searchButton} variant="contained" color="primary">Search</Button>
+                                <Button onClick={searchBeer} className={classes.searchButton} variant="contained" color="primary">Search</Button>
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
                             {(!searchQuery && !tags?.length) && (

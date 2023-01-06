@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import PostMessage from "../models/postMessage.js";
 
-export const getPosts = async (req, res) => {
+export const getBeers = async (req, res) => {
     const { page } = req.query;
 
     try {
@@ -17,7 +17,7 @@ export const getPosts = async (req, res) => {
     }
 }
 
-export const getPostsBySearch = async (req, res) => {
+export const getBeersBySearch = async (req, res) => {
     const { searchQuery, tags } = req.query
 
     try {
@@ -31,7 +31,7 @@ export const getPostsBySearch = async (req, res) => {
     }
 }
 
-export const createPost = async (req, res) => {
+export const createBeer = async (req, res) => {
     const post = req.body;
 
     const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
@@ -44,7 +44,7 @@ export const createPost = async (req, res) => {
     }
 }
 
-export const updatePost = async (req, res) => {
+export const updateBeer = async (req, res) => {
     const { id: _id } = req.params;
     const post = req.body;
 
@@ -55,7 +55,7 @@ export const updatePost = async (req, res) => {
     res.json(updatedPost);
 }
 
-export const deletePost = async (req, res) => {
+export const deleteBeer = async (req, res) => {
     const { id } = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
@@ -65,7 +65,7 @@ export const deletePost = async (req, res) => {
     res.json({ message: 'Post deleted successfully' });
 }
 
-export const likePost = async (req, res) => {
+export const likeBeer = async (req, res) => {
     const { id } = req.params;
 
     if(!req.userId) return res.json({ message: "Unauthenticated" });

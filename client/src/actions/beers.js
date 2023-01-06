@@ -2,10 +2,10 @@ import { FETCH_ALL, FETCH_BY_SEARCH, CREATE, UPDATE, DELETE, START_LOADING, END_
 import * as api from '../api';
 
 //Action Creators
-export const getPosts = (page) => async (dispatch) => {
+export const getBeers = (page) => async (dispatch) => {
     try {
         dispatch({ type: START_LOADING });
-        const { data } = await api.fetchPosts(page);
+        const { data } = await api.fetchBeers(page);
 
         dispatch({ type: FETCH_ALL, payload: data });
         dispatch({ type: END_LOADING });
@@ -14,10 +14,10 @@ export const getPosts = (page) => async (dispatch) => {
     }
 }
 
-export const getPostBySearch = (searchQuery) => async (dispatch) => {
+export const getBeersBySearch = (searchQuery) => async (dispatch) => {
     try {
         dispatch({ type: START_LOADING });
-        const { data: { data } } = await api.fetchPostsBySearch(searchQuery);
+        const { data: { data } } = await api.fetchBeersBySearch(searchQuery);
 
         dispatch({ type: FETCH_BY_SEARCH, payload: data });
         dispatch({ type: END_LOADING });
@@ -26,10 +26,10 @@ export const getPostBySearch = (searchQuery) => async (dispatch) => {
     }
 }
 
-export const createPost = (post) => async (dispatch) => {
+export const createBeer = (post) => async (dispatch) => {
     try {
         dispatch({ type: START_LOADING });
-        const { data } = await api.createPost(post);
+        const { data } = await api.createBeer(post);
         dispatch({ type: CREATE, payload: data });
         dispatch({ type: END_LOADING });
     } catch (error) {
@@ -37,9 +37,9 @@ export const createPost = (post) => async (dispatch) => {
     }
 }
 
-export const updatePost = (id, post) => async (dispatch) => {
+export const updateBeer = (id, post) => async (dispatch) => {
     try {
-        const { data } = await api.updatePost(id, post);
+        const { data } = await api.updateBeer(id, post);
 
         dispatch({ type: UPDATE, payload: data });
     } catch (error) {
@@ -47,9 +47,9 @@ export const updatePost = (id, post) => async (dispatch) => {
     }
 }
 
-export const deletePost = (id) => async (dispatch) => {
+export const deleteBeer = (id) => async (dispatch) => {
     try {
-        await api.deletePost(id);
+        await api.deleteBeer(id);
 
         dispatch({ type: DELETE, payload: id });
     } catch (error) {
@@ -57,9 +57,9 @@ export const deletePost = (id) => async (dispatch) => {
     }
 }
 
-export const likePost = (id) => async (dispatch) => {
+export const likeBeer = (id) => async (dispatch) => {
     try {
-        const { data } = await api.likePost(id);
+        const { data } = await api.likeBeer(id);
 
         dispatch({ type: UPDATE, payload: data });
     } catch (error) {

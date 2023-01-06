@@ -8,10 +8,10 @@ import useStyles from './styles';
 import { Button, Card, CardActions, CardContent, CardMedia, Typography } from "@mui/material";
 import { useDispatch } from 'react-redux';
 
-import { deletePost, likePost } from "../../../actions/posts";
+import { deleteBeer, likeBeer } from "../../../actions/beers";
 
 
-const Post = ({ post, setCurrentId }) => {
+const Beer = ({ post, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -51,11 +51,11 @@ const Post = ({ post, setCurrentId }) => {
                 <Typography variant="h5" color="textSecondary" component="p">{post.message}</Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likePost(post._id))}>
+                <Button size="small" color="primary" disabled={!user?.result} onClick={() => dispatch(likeBeer(post._id))}>
                     <Likes />
                 </Button>
                 {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
-                    <Button size="small" color="secondary" onClick={() => dispatch(deletePost(post._id))}>
+                    <Button size="small" color="secondary" onClick={() => dispatch(deleteBeer(post._id))}>
                         <DeleteIcon fontSize="small" /> Delete
                     </Button>
                 )}
@@ -64,4 +64,4 @@ const Post = ({ post, setCurrentId }) => {
     );
 }
 
-export default Post;
+export default Beer;

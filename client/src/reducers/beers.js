@@ -1,6 +1,6 @@
 import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, LIKE } from '../constants/actionTypes';
 
-const postsReducer =  (state = { isLoading: true, posts: [] }, action) => {
+const beersReducer =  (state = { isLoading: true, posts: [] }, action) => {
     switch (action.type) {
         case START_LOADING:
             return {
@@ -37,4 +37,4 @@ const postsReducer =  (state = { isLoading: true, posts: [] }, action) => {
     }
 };
 
-export default postsReducer;
+export default beersReducer;
