@@ -25,12 +25,12 @@ const Home = () => {
     const searchQuery = query.get('searchQuery');
     const classes = useStyles();
     const [search, setSearch] = useState('');
-    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const searchBeer = () => {
-        if (search.trim() || tags) {
-            dispatch(getBeersBySearch({ search, tags: tags.join(',') }));
-            navigate(`/posts/search?searchQuery=${search || 'none'}&tags=${tags.join(',')}`);
+        if (search.trim() || categories) {
+            dispatch(getBeersBySearch({ search, categories: categories.join(',') }));
+            navigate(`/beers/search?searchQuery=${search || 'none'}&categories=${categories.join(',')}`);
         } else {
             navigate('/');
         }
@@ -42,9 +42,9 @@ const Home = () => {
         }
     }
 
-    const handleAdd = (tagToAdd) => setTags([...tags, tagToAdd]);
+    const handleAdd = (categoryToAdd) => setCategories([...categories, categoryToAdd]);
 
-    const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => !(tag === tagToDelete)));
+    const handleDelete = (categoryToDelete) => setCategories(categories.filter((category) => !(category === categoryToDelete)));
 
     return (
         <div>
@@ -68,16 +68,16 @@ const Home = () => {
                                 />
                                 <ChipInput
                                     styles={{ margin: '10px 0' }}
-                                    value={tags}
+                                    value={categories}
                                     onAdd={handleAdd}
                                     onDelete={handleDelete}
-                                    label="Search Tags"
+                                    label="Search Categories"
                                     variant="outlined"
                                 />
                                 <Button onClick={searchBeer} className={classes.searchButton} variant="contained" color="primary">Search</Button>
                             </AppBar>
                             <Form currentId={currentId} setCurrentId={setCurrentId} />
-                            {(!searchQuery && !tags?.length) && (
+                            {(!searchQuery && !categories?.length) && (
                                 <Paper elevation={6} className={classes.pagination} >
                                     <Paginate page={page} />
                                 </Paper>

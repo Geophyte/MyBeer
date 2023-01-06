@@ -10,6 +10,6 @@ router.get('/', getBeers);
 router.post('/', auth, createBeer);
 router.patch('/:id', auth, updateBeer);
 router.delete('/:id', auth, deleteBeer);
-router.patch('/:id/likePost', auth, likeBeer);
+router.patch('/:id/likeBeer', auth, likeBeer);
 
 export default router;

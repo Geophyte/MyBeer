@@ -7,17 +7,17 @@ import Beer from "./Beer/Beer";
 import useStyles from './styles';
 
 const Beers = ({ setCurrentId }) => {
-    const { posts, isLoading } = useSelector((state) => state.posts);
+    const { beers, isLoading } = useSelector((state) => state.beers);
     const classes = useStyles();
 
-    if(!posts?.length && !isLoading) return 'No posts';
+    if(!beers?.length && !isLoading) return 'No beers';
 
     return (
         isLoading ? <CircularProgress /> : (
             <Grid className={classes.container} container alignItems="stretch" spacing={3}>
-                {posts.map((post) => (
-                        <Grid key={post._id} item xs={12} sm={12} md={6} lg={3}>
-                            <Beer post={post} setCurrentId={setCurrentId} />
+                {beers.map((beer) => (
+                        <Grid key={beer._id} item xs={12} sm={12} md={6} lg={3}>
+                            <Beer beer={beer} setCurrentId={setCurrentId} />
                         </Grid>
                     ))}
             </Grid>

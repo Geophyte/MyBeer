@@ -1,6 +1,6 @@
 import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, LIKE } from '../constants/actionTypes';
 
-const beersReducer =  (state = { isLoading: true, posts: [] }, action) => {
+const beersReducer =  (state = { isLoading: true, beers: [] }, action) => {
     switch (action.type) {
         case START_LOADING:
             return {
@@ -15,23 +15,23 @@ const beersReducer =  (state = { isLoading: true, posts: [] }, action) => {
         case FETCH_ALL:
             return {
                 ...state,
-                posts: action.payload.data,
+                beers: action.payload.data,
                 currentPage: action.payload.currentPage,
                 numberOfPages: action.payload.numberOfPages
             }
         case FETCH_BY_SEARCH:
             return {
                 ...state,
-                posts: action.payload.data,
+                beers: action.payload.data,
             }
         case LIKE:
-            return { ...state, posts: state.posts.map((post) => (post._id === action.payload._id ? action.payload : post)) };
+            return { ...state, beers: state.beers.map((beer) => (beer._id === action.payload._id ? action.payload : beer)) };
         case CREATE:
-            return { ...state, posts: [...state.posts, action.payload] };
+            return { ...state, beers: [...state.beers, action.payload] };
         case UPDATE:
-            return { ...state, posts: state.posts.map((post) => (post._id === action.payload._id ? action.payload : post)) };
+            return { ...state, beers: state.beers.map((beer) => (beer._id === action.payload._id ? action.payload : beer)) };
         case DELETE:
-            return { ...state, posts: state.posts.filter((post) => post._id !== action.payload) };
+            return { ...state, beers: state.beers.filter((beer) => beer._id !== action.payload) };
         default:
             return state;
     }

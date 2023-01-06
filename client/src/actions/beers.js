@@ -26,10 +26,10 @@ export const getBeersBySearch = (searchQuery) => async (dispatch) => {
     }
 }
 
-export const createBeer = (post) => async (dispatch) => {
+export const createBeer = (beer) => async (dispatch) => {
     try {
         dispatch({ type: START_LOADING });
-        const { data } = await api.createBeer(post);
+        const { data } = await api.createBeer(beer);
         dispatch({ type: CREATE, payload: data });
         dispatch({ type: END_LOADING });
     } catch (error) {
@@ -37,9 +37,9 @@ export const createBeer = (post) => async (dispatch) => {
     }
 }
 
-export const updateBeer = (id, post) => async (dispatch) => {
+export const updateBeer = (id, beer) => async (dispatch) => {
     try {
-        const { data } = await api.updateBeer(id, post);
+        const { data } = await api.updateBeer(id, beer);
 
         dispatch({ type: UPDATE, payload: data });
     } catch (error) {

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
-const postSchema = mongoose.Schema({
+const beerSchema = mongoose.Schema({
     title: String,
     message: String,
     name: String,
     creator: String,
-    tags: [String],
+    categories: [String],
     selectedFile: String,
     likes: {
         type: [String],
@@ -17,6 +17,6 @@ const postSchema = mongoose.Schema({
     }
 });
 
-const PostMessage = mongoose.model('PostMessage', postSchema);
+const Beer = mongoose.model('Beer', beerSchema);
 
-export default PostMessage;
+export default Beer;

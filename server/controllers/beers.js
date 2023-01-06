@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import PostMessage from "../models/postMessage.js";
+import Beer from "../models/beer.js";
 
 export const getBeers = async (req, res) => {
     const { page } = req.query;
@@ -7,38 +7,38 @@ export const getBeers = async (req, res) => {
     try {
         const LIMIT = 8;
         const startIndex = (Number(page) -1)*LIMIT; // startIndex of every page
-        const total = await PostMessage.countDocuments({});
+        const total = await Beer.countDocuments({});
 
-        const posts = await PostMessage.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
+        const beers = await Beer.find().sort({ _id: -1 }).limit(LIMIT).skip(startIndex);
 
-        res.status(200).json({ data: posts, currentPage: Number(page), numberOfPages: Math.ceil(total/LIMIT) });
+        res.status(200).json({ data: beers, currentPage: Number(page), numberOfPages: Math.ceil(total/LIMIT) });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 }
 
 export const getBeersBySearch = async (req, res) => {
-    const { searchQuery, tags } = req.query
+    const { searchQuery, categories } = req.query
 
     try {
         const title = new RegExp(searchQuery, 'i'); // ignore size of letters (Test=TEST=TeST)
 
-        const posts = await PostMessage.find({ $or: [ { title }, { tags:{ $in: tags.split(',')} }] });
+        const beers = await Beer.find({ $or: [ { title }, { categories:{ $in: categories.split(',')} }] });
 
-        res.json({ data: posts });
+        res.json({ data: beers });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 }
 
 export const createBeer = async (req, res) => {
-    const post = req.body;
+    const beer = req.body;
 
-    const newPost = new PostMessage({ ...post, creator: req.userId, createdAt: new Date().toISOString() });
+    const newBeer = new Beer({ ...beer, creator: req.userId, createdAt: new Date().toISOString() });
     try {
-        await newPost.save();
+        await newBeer.save();
 
-        res.status(201).json(newPost);
+        res.status(201).json(newBeer);
     } catch (error) {
         res.status(409).json({message: error.message });
     }
@@ -46,23 +46,23 @@ export const createBeer = async (req, res) => {
 
 export const updateBeer = async (req, res) => {
     const { id: _id } = req.params;
-    const post = req.body;
+    const beer = req.body;
 
-    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id');
+    if(!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No beer with that id');
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(_id, { ...post, _id }, { new: true });
+    const updatedBeer = await Beer.findByIdAndUpdate(_id, { ...beer, _id }, { new: true });
     
-    res.json(updatedPost);
+    res.json(updatedBeer);
 }
 
 export const deleteBeer = async (req, res) => {
     const { id } = req.params;
 
-    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No beer with that id');
 
-    await PostMessage.findByIdAndDelete(id);
+    await Beer.findByIdAndDelete(id);
 
-    res.json({ message: 'Post deleted successfully' });
+    res.json({ message: 'beer deleted successfully' });
 }
 
 export const likeBeer = async (req, res) => {
@@ -70,21 +70,21 @@ export const likeBeer = async (req, res) => {
 
     if(!req.userId) return res.json({ message: "Unauthenticated" });
 
-    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id');
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No beer with that id');
 
-    const post = await PostMessage.findById(id);
+    const beer = await Beer.findById(id);
 
-    const index = post.likes.findIndex((id) => id === String(req.userId));
+    const index = beer.likes.findIndex((id) => id === String(req.userId));
 
     if(index === -1) {
         //like
-        post.likes.push(req.userId);
+        beer.likes.push(req.userId);
     } else {
         // alreadey liked, dislike
-        post.likes = post.likes.filter((id) => !(id === String(req.userId)));
+        beer.likes = beer.likes.filter((id) => !(id === String(req.userId)));
     }
 
-    const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
+    const updatedBeer = await Beer.findByIdAndUpdate(id, beer, { new: true });
 
-    res.json(updatedPost);
+    res.json(updatedBeer);
 }

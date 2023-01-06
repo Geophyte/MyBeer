@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBeers } from '../actions/beers';
 
 export const Paginate = ({ page }) => {
-    const { numberOfPages } = useSelector((state) => state.posts);
+    const { numberOfPages } = useSelector((state) => state.beers);
     const classes = useStyles();
     const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ export const Paginate = ({ page }) => {
             variant="outlined"
             color="primary"
             renderItem={(item) => (
-                <PaginationItem {...item} component={Link} to={`/posts?page=${item.page}`} />
+                <PaginationItem {...item} component={Link} to={`/beers?page=${item.page}`} />
             )}
         />
     )
