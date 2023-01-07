@@ -86,7 +86,7 @@ const Home = () => {
                                 )}
                             </Grid>
                         </Grid>
-                        : <BeerDetails currentId={currentId} setCurrentId={setCurrentId} />
+                        : <BeerDetails currentId={currentId} />
                     }
                 </Container>
             </Grow>

@@ -6,7 +6,7 @@ import { createBeer, updateBeer } from "../../../../actions/beers";
 
 import useStyles from './styles';
 
-const CommentForm = ({ currentId, setCurrentId }) => {
+const ReviewForm = ({ currentId }) => {
     const [beerData, setBeerData] = useState({ title: '', message: '', categories:'', selectedFile: '' });
     const beer = useSelector((state) => currentId ? (state.beers instanceof Array ? state.beers.find((p) => p._id ===currentId): state.beers.beers.find((p) => p._id ===currentId)) : null);
     console.log(beer)
@@ -38,7 +38,7 @@ const CommentForm = ({ currentId, setCurrentId }) => {
     }
 
     const clear = () => {
-        setCurrentId(null);
+        //setCurrentId(null);
         setBeerData({ title: '', message: '', categories:'', selectedFile: '' });
     }
 
@@ -63,4 +63,4 @@ const CommentForm = ({ currentId, setCurrentId }) => {
     );
 }
 
-export default CommentForm;
+export default ReviewForm;
