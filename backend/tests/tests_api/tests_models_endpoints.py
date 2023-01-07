@@ -206,6 +206,17 @@ class AuthenticatedUserTestCase(APITestCase):
         response = self.client.get('/api/v1/beers/?category=Lager', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
         self.assertEqual(response.status_code, 200)
 
+    def test_beer_filter_name_with_spaces(self):
+        beer = Beer.objects.create(name='name with spaces',
+                                   description='foobar',
+                                   category=self.category_1,
+                                   created_by=self.user_1)
+        beer.save()
+        response = self.client.get('/api/v1/beers/?name=name with spaces', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        self.assertEqual(response.status_code, 200)
+        name = response.data[0].get('name')
+        self.assertEqual(name, 'name with spaces')
+
     def test_category_list(self):
         response = self.client.get('/api/v1/categories/', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
         self.assertEqual(response.status_code, 200)
@@ -245,7 +256,6 @@ class AuthenticatedUserTestCase(APITestCase):
     def test_get_user(self):
         response = self.client.get(f'/api/v1/users/{self.user_1.id}/', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
         self.assertEqual(response.status_code, 200)
-
 
     def test_post_category(self):
         new_category = {
