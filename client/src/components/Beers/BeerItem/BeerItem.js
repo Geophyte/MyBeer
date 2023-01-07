@@ -12,7 +12,7 @@ import { deleteBeer, likeBeer } from "../../../actions/beers";
 import { Link } from "@material-ui/core";
 
 
-const Beer = ({ beer, setCurrentId }) => {
+const BeerItem = ({ beer, setCurrentId, setIsMainPage }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -48,8 +48,18 @@ const Beer = ({ beer, setCurrentId }) => {
                 <Typography variant="body2" color="textSecondary">{beer.categories.map((category) => `#${category} `)}</Typography>
             </div>
 
-            <Typography className={classes.title}  gutterBottom>
-                <Link variant="h5" underline="none" color="inherit" onClick={()=>{}} tabIndex={0} component="button">
+            <Typography className={classes.title} gutterBottom>
+                <Link
+                    variant="h5"
+                    underline="none"
+                    color="inherit"
+                    onClick={() => {
+                        setCurrentId(beer._id);
+                        setIsMainPage(false);
+                    }}
+                    tabIndex={0}
+                    component="button"
+                >
                     {beer.title}
                 </Link>
             </Typography>
@@ -71,4 +81,4 @@ const Beer = ({ beer, setCurrentId }) => {
     );
 }
 
-export default Beer;
+export default BeerItem;

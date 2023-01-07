@@ -1,16 +1,16 @@
 import { Container, Grid, Grow, Paper, AppBar, TextField, Button } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ChipInput from 'material-ui-chip-input';
 
 import Beers from '../Beers/Beers';
-import Form from '../Form/Form';
+import BeerForm from '../Beers/BeerForm/BeerForm';
 import { useDispatch } from 'react-redux';
-import { getBeers, getBeersBySearch } from '../../actions/beers';
+import { getBeersBySearch } from '../../actions/beers';
 import { Paginate } from '../Paginate';
-import { ClassNames } from '@emotion/react';
 
 import useStyles from './styles';
+import BeerDetails from '../Beers/BeerDetails/BeerDetails';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -26,6 +26,7 @@ const Home = () => {
     const classes = useStyles();
     const [search, setSearch] = useState('');
     const [categories, setCategories] = useState([]);
+    const [isMainPage, setIsMainPage] = useState(true);
 
     const searchBeer = () => {
         if (search.trim() || categories) {
@@ -50,40 +51,43 @@ const Home = () => {
         <div>
             <Grow in>
                 <Container maxWidth="xl">
-                    <Grid container justifyContent="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
-                        <Grid item xs={12} sm={6} md={9}>
-                            <Beers setCurrentId={setCurrentId} />
-                        </Grid>
+                    {isMainPage ?
+                        <Grid container justifyContent="space-between" alignItems="stretch" spacing={3} className={classes.gridContainer}>
+                            <Grid item xs={12} sm={6} md={9}>
+                                <Beers setCurrentId={setCurrentId} setIsMainPage={setIsMainPage} />
+                            </Grid>
 
-                        <Grid item xs={12} sm={6} md={3}>
-                            <AppBar className={classes.appBarSearch} position="static" color="inherit">
-                                <TextField
-                                    name="search"
-                                    variant="outlined"
-                                    label="Search Beers"
-                                    onKeyPress={handleKeyPress}
-                                    fullWidth
-                                    value={search}
-                                    onChange={(e) => { setSearch(e.target.value) }}
-                                />
-                                <ChipInput
-                                    styles={{ margin: '10px 0' }}
-                                    value={categories}
-                                    onAdd={handleAdd}
-                                    onDelete={handleDelete}
-                                    label="Search Categories"
-                                    variant="outlined"
-                                />
-                                <Button onClick={searchBeer} className={classes.searchButton} variant="contained" color="primary">Search</Button>
-                            </AppBar>
-                            <Form currentId={currentId} setCurrentId={setCurrentId} />
-                            {(!searchQuery && !categories?.length) && (
-                                <Paper elevation={6} className={classes.pagination} >
-                                    <Paginate page={page} />
-                                </Paper>
-                            )}
+                            <Grid item xs={12} sm={6} md={3}>
+                                <AppBar className={classes.appBarSearch} position="static" color="inherit">
+                                    <TextField
+                                        name="search"
+                                        variant="outlined"
+                                        label="Search Beers"
+                                        onKeyPress={handleKeyPress}
+                                        fullWidth
+                                        value={search}
+                                        onChange={(e) => { setSearch(e.target.value) }}
+                                    />
+                                    <ChipInput
+                                        styles={{ margin: '10px 0' }}
+                                        value={categories}
+                                        onAdd={handleAdd}
+                                        onDelete={handleDelete}
+                                        label="Search Categories"
+                                        variant="outlined"
+                                    />
+                                    <Button onClick={searchBeer} className={classes.searchButton} variant="contained" color="primary">Search</Button>
+                                </AppBar>
+                                <BeerForm currentId={currentId} setCurrentId={setCurrentId} />
+                                {(!searchQuery && !categories?.length) && (
+                                    <Paper elevation={6} className={classes.pagination} >
+                                        <Paginate page={page} />
+                                    </Paper>
+                                )}
+                            </Grid>
                         </Grid>
-                    </Grid>
+                        : <BeerDetails currentId={currentId} setCurrentId={setCurrentId} />
+                    }
                 </Container>
             </Grow>
         </div>

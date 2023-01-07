@@ -4,9 +4,9 @@ import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from "react-redux";
 
 import useStyles from './styles';
-import { createBeer, updateBeer } from "../../actions/beers";
+import { createBeer, updateBeer } from "../../../actions/beers";
 
-const Form = ({ currentId, setCurrentId }) => {
+const BeerForm = ({ currentId, setCurrentId }) => {
     const [beerData, setBeerData] = useState({ title: '', message: '', categories:'', selectedFile: '' });
     const beer = useSelector((state) => currentId ? (state.beers instanceof Array ? state.beers.find((p) => p._id ===currentId): state.beers.beers.find((p) => p._id ===currentId)) : null);
     console.log(beer)
@@ -63,4 +63,4 @@ const Form = ({ currentId, setCurrentId }) => {
     );
 }
 
-export default Form;
+export default BeerForm;
