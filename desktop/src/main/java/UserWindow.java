@@ -1,44 +1,45 @@
-import netscape.javascript.JSObject;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import javax.swing.*;
 import javax.json.*;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.*;
 
-public class UserWindow {
+public class UserWindow extends JFrame {
     private JPanel mainPanel;
     private JLabel userIcon;
     private JTextPane userData;
-    private JsonArray data;
 
-    UserWindow(String userLogin) throws FileNotFoundException {
-        // Load users data
-        InputStream fis = new FileInputStream("users.json");
-        JsonReader reader = Json.createReader(fis);
-        data = reader.readArray();
-        reader.close();
+    private static final String user_url = "http://127.0.0.1:8000/api/v1/auth/user";
 
-        loadUser(userLogin);
-    }
+    UserWindow(JsonObject userObject) {
+        setTitle("User Window");
+        add(mainPanel);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        pack();
+        setResizable(false);
+        setVisible(true);
 
-    void loadUser(String userLogin){
-        // Find right user
-        for(int i=0; i<data.size(); i++) {
-            JsonObject userObject = data.getJsonObject(i);
-            if(userObject.getString("login").equals(userLogin)) {
-                ImageIcon imgIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon(userObject.getString("image")).getImage(), 200, 200));
-                userIcon.setIcon(imgIcon);
-                userData.setContentType("text/html");
-                userData.setText(String.format("<html>login: %s, password: %s</html>", userObject.getString("login"), userObject.getString("password")));
+        ImageIcon imgIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("user.png").getImage(), 200, 200));
+        userIcon.setIcon(imgIcon);
+        userData.setContentType("text/html");
+        String html = "<html>username: %s<br>email: %s</html>";
+        userData.setText(String.format(html,
+                userObject.getJsonObject("user_info").getString("username"),
+                userObject.getJsonObject("user_info").getString("email")));
+        userData.setEditable(false);
 
-                JFrame frame = new JFrame("User Info");
-                frame.add(mainPanel);
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.pack();
-                frame.setResizable(false);
-                frame.setVisible(true);
+        addWindowFocusListener(new WindowAdapter() {
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                dispose();
             }
-        }
+        });
     }
 }

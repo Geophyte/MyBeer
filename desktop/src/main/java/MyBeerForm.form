@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="MyBeerForm">
   <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="556" height="400"/>
     </constraints>
     <properties/>
     <border type="none" title=""/>
@@ -46,6 +46,13 @@
                   <text value=""/>
                 </properties>
               </component>
+              <component id="3dff6" class="javax.swing.JComboBox" binding="searchCategoryComboBox">
+                <constraints/>
+                <properties>
+                  <enabled value="false"/>
+                  <visible value="false"/>
+                </properties>
+              </component>
             </children>
           </grid>
           <grid id="19d95" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
@@ -53,10 +60,12 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="1813f" class="javax.swing.JLabel" binding="userName">
+              <component id="1813f" class="javax.swing.JLabel" binding="usernameLabel">
                 <constraints/>
                 <properties>
                   <alignmentX value="0.0"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
                   <preferredSize width="100" height="16"/>
                   <text value="Some User Name"/>
                 </properties>
@@ -107,27 +116,132 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="d651c" binding="reviewPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                  <grid id="d651c" binding="beerPagePanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints/>
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <grid id="d461a" layout-manager="BorderLayout" hgap="0" vgap="0">
+                      <grid id="a41aa" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints border-constraint="North"/>
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="f4280" class="javax.swing.JTextPane" binding="beerInfo">
+                          <component id="e62f" class="javax.swing.JLabel" binding="beerImage">
+                            <constraints border-constraint="West"/>
+                            <properties>
+                              <text value=""/>
+                            </properties>
+                          </component>
+                          <component id="5f62b" class="javax.swing.JTextPane" binding="beerInfoPane">
                             <constraints border-constraint="Center"/>
                             <properties/>
                           </component>
-                          <component id="d35da" class="javax.swing.JLabel" binding="beerImage">
-                            <constraints border-constraint="West"/>
-                            <properties>
-                              <preferredSize width="200" height="200"/>
-                              <text value="Label"/>
-                            </properties>
-                          </component>
+                          <grid id="8a023" layout-manager="BorderLayout" hgap="0" vgap="0">
+                            <constraints border-constraint="South"/>
+                            <properties/>
+                            <border type="none"/>
+                            <children>
+                              <grid id="6b92e" layout-manager="GridBagLayout">
+                                <constraints border-constraint="West"/>
+                                <properties/>
+                                <border type="none"/>
+                                <children>
+                                  <grid id="411da" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                                    <constraints>
+                                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties/>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="19184" class="javax.swing.JLabel">
+                                        <constraints/>
+                                        <properties>
+                                          <text value="Rating"/>
+                                        </properties>
+                                      </component>
+                                    </children>
+                                  </grid>
+                                  <grid id="b3dcc" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                                    <constraints>
+                                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties/>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="bed6f" class="javax.swing.JLabel">
+                                        <constraints/>
+                                        <properties>
+                                          <text value="Title"/>
+                                        </properties>
+                                      </component>
+                                    </children>
+                                  </grid>
+                                  <grid id="be829" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                                    <constraints>
+                                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties/>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="53faf" class="javax.swing.JLabel">
+                                        <constraints/>
+                                        <properties>
+                                          <text value="Review"/>
+                                        </properties>
+                                      </component>
+                                    </children>
+                                  </grid>
+                                  <component id="a9a33" class="javax.swing.JButton" binding="postReviewButton">
+                                    <constraints>
+                                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties>
+                                      <text value="Add review"/>
+                                    </properties>
+                                  </component>
+                                  <component id="bd745" class="javax.swing.JComboBox" binding="ratingComboBox">
+                                    <constraints>
+                                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties/>
+                                  </component>
+                                  <component id="2ac16" class="javax.swing.JTextField" binding="titleFiled">
+                                    <constraints>
+                                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                                        <preferred-size width="150" height="-1"/>
+                                      </grid>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties/>
+                                  </component>
+                                  <scrollpane id="bcc09">
+                                    <constraints>
+                                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                                      <gridbag weightx="0.0" weighty="0.0"/>
+                                    </constraints>
+                                    <properties>
+                                      <preferredSize width="250" height="100"/>
+                                    </properties>
+                                    <border type="none"/>
+                                    <children>
+                                      <component id="ec776" class="javax.swing.JTextArea" binding="reviewArea">
+                                        <constraints/>
+                                        <properties>
+                                          <lineWrap value="true"/>
+                                          <wrapStyleWord value="true"/>
+                                        </properties>
+                                      </component>
+                                    </children>
+                                  </scrollpane>
+                                </children>
+                              </grid>
+                            </children>
+                          </grid>
                         </children>
                       </grid>
                     </children>

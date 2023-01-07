@@ -1,45 +1,50 @@
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.io.FileNotFoundException;
+import java.io.StringReader;
 
 public class CommentForm {
-    public JPanel mainPanel;
+    private JPanel mainPanel;
     private JButton authorButton;
-    private JTextPane authorDatePane;
     private JTextPane commentPane;
 
-    public CommentForm(String author, String date, ImageIcon authorsPic, String comment) {
-        authorButton.setIcon(authorsPic);
-        authorButton.addActionListener(e->{
-            System.out.println("Comment author clicked");
-            try {
-                new UserWindow(author);
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+    public CommentForm(String token, JsonObject commentData) {
+        // load author data
+        int authorID = commentData.getInt("author");
 
-        String authorDate = String.format(
-                "<div class=\"comment\">\n" +
-                        "  <div class=\"comment-header\">\n" +
-                        "    <span class=\"comment-author\">%s</span>\n" +
-                        "    <br>\n" +
-                        "    <font size=\"2\"\n" +
-                        "    <span class=\"comment-date\">%s</span>\n" +
-                        "    </font>\n" +
-                        "  </div>\n" +
-                        "</div>",
-                author, date
-        );
-        authorDatePane.setContentType("text/html");
-        authorDatePane.setText(authorDate);
+        String responseString = Backend.getJsonString(Backend.dataURL + "users/" + authorID, token);
+        if(responseString != null) {
+            JsonReader reader = Json.createReader(new StringReader(responseString));
+            JsonObject userObject = reader.readObject();
+
+            String author = userObject.getString("username");
+
+            authorButton.setText(author);
+            authorButton.addActionListener(e-> {
+                UserWindow wnd = new UserWindow(userObject);
+                wnd.setLocationRelativeTo(authorButton);
+            });
+        } else {
+            authorButton.setText("[Unknown]");
+        }
+
+        String content = commentData.getString("content").replaceAll("\n", "<br>");
+        String html = "<html><body style='width: %1spx'>" +
+                "<p>%s</p>" +
+                "</html>";
 
         commentPane.setContentType("text/html");
-        commentPane.setText(comment);
+        commentPane.setText(String.format(html, 300, content));
 
         Border border = new LineBorder(Color.lightGray, 1);
         mainPanel.setBorder(border);
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 }

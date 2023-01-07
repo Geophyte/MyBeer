@@ -12,9 +12,10 @@ public class CommentTreeCellRenderer extends DefaultTreeCellRenderer {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         Object userObject = node.getUserObject();
         if(userObject instanceof CommentForm) {
-            return ((CommentForm) userObject).mainPanel;
-        }
-        else {
+            return ((CommentForm) userObject).getMainPanel();
+        } else if (userObject instanceof  ReviewForm) {
+            return ((ReviewForm) userObject).getMainPanel();
+        } else {
             String text = (String) userObject;
             JTextPane defaultPane = new JTextPane();
             defaultPane.setText(text);

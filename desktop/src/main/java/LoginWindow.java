@@ -1,88 +1,138 @@
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import javax.json.*;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
-public class LoginWindow {
+public class LoginWindow extends JFrame {
     private JPanel mainPanel;
-    private JTextField userField;
-    private JPasswordField passwordField;
-    private JButton logInButton;
-    private JButton signUpButton;
     private JLabel logoField;
-    private JFrame frame;
+    private JButton logInButton;
+    private JTextField loginUsernameField;
+    private JPasswordField loginPasswordField;
+    private JButton signUpButton;
+    private JTextField signupUsernameField;
+    private JPasswordField signupPasswordField;
+    private JPasswordField signupConfPasswordField;
+    private JTextField signupEMailField;
+    private JTextField signupLastNameField;
+    private JTextField signupFirstNameField;
 
-    LoginWindow() throws FileNotFoundException {
+    LoginWindow() {
         // setup logo
         logoField.setIcon(new ImageIcon("beer100x100.png"));
 
-        frame = new JFrame("Login Window");
-        frame.add(mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setVisible(true);
+        setTitle("Login Window");
+        add(mainPanel);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setResizable(false);
+        setVisible(true);
 
-        // Load users data
-        InputStream fis = new FileInputStream("users.json");
-        JsonReader reader = Json.createReader(fis);
-        JsonArray data = reader.readArray();
-        reader.close();
-
-        // setup log in button
-        logInButton.addActionListener(e->{
-            String login = userField.getText();
-            String password = String.valueOf(passwordField.getPassword());
-
-            for(int i=0; i<data.size(); i++) {
-                JsonObject userObject = data.getJsonObject(i);
-                if(userObject.getString("login").equals(login)) {
-                    if(userObject.getString("password").equals(password)) {
-                        frame.setVisible(false);
-
-                        // Create main app window
-                        try {
-                            new MyBeerForm(login);
-                        } catch (FileNotFoundException ex) {
-                            throw new RuntimeException(ex);
-                        }
-                    }
-                    return;
-                }
-            }
-            JOptionPane.showMessageDialog(null, "Wrong login or password", "Error", ERROR_MESSAGE);
-        });
+        initSignupFields();
+        initLoginFields();
 
         // setup sign up button
         signUpButton.addActionListener(e->{
-            String login = userField.getText();
-            String password = String.valueOf(passwordField.getPassword());
-
-            // Check login
-            for(int i=0; i<data.size(); i++) {
-                JsonObject userObject = data.getJsonObject(i);
-                if(userObject.getString("login").equals(login)) {
-                    JOptionPane.showMessageDialog(null, "Login already in use", "Error", ERROR_MESSAGE);
-                    return;
-                }
-            }
-
-            // Check password
-            if(password.length() < 5) {
-                JOptionPane.showMessageDialog(null, "Password must be longer than 5 characters", "Error", ERROR_MESSAGE);
-                return;
-            }
-
-            // Add new user to database
-            System.out.println(String.format("Adding new user: %s, password: %s", login, password));
+            signup();
         });
+
+        // set up log in button
+        logInButton.addActionListener(e->{
+            login();
+        });
+    }
+
+    private void initSignupFields() {
+        signupFirstNameField.addActionListener(e->{
+            signupLastNameField.requestFocus();
+        });
+        signupLastNameField.addActionListener(e->{
+            signupEMailField.requestFocus();
+        });
+        signupEMailField.addActionListener(e->{
+            signupUsernameField.requestFocus();
+        });
+        signupUsernameField.addActionListener(e->{
+            signupPasswordField.requestFocus();
+        });
+        signupPasswordField.addActionListener(e->{
+            signupConfPasswordField.requestFocus();
+        });
+        signupConfPasswordField.addActionListener(e->{
+            signup();
+        });
+    }
+
+    private void initLoginFields() {
+        loginUsernameField.addActionListener(e->{
+            loginPasswordField.requestFocus();
+        });
+
+        loginPasswordField.addActionListener(e->{
+            login();
+        });
+    }
+
+    private void signup() {
+        String firstName = signupFirstNameField.getText();
+        String lastName = signupLastNameField.getText();
+        String email = signupEMailField.getText();
+        String username = signupUsernameField.getText();
+        String password = String.valueOf(signupPasswordField.getPassword());
+        String confPassword = String.valueOf(signupConfPasswordField.getPassword());
+
+        if(!password.equals(confPassword)) {
+            JOptionPane.showMessageDialog(null, "Passwords are not the same", "Error", ERROR_MESSAGE);
+            return;
+        }
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("first_name", firstName));
+        params.add(new BasicNameValuePair("last_name", lastName));
+        params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("password", password));
+
+        if (Backend.post(Backend.signupURL, params) != null) {
+            JOptionPane.showMessageDialog(null, "Sign up successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Sign up failure", "Error", ERROR_MESSAGE);
+        }
+    }
+
+    private void login() {
+        String username = loginUsernameField.getText();
+        String password = String.valueOf(loginPasswordField.getPassword());
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("password", password));
+
+        String responseString = Backend.post(Backend.loginURL, params);
+        if(responseString != null) {
+            JsonReader reader = Json.createReader(new StringReader(responseString));
+            JsonObject responseJson = reader.readObject();
+            String token = responseJson.getString("token");
+            JOptionPane.showMessageDialog(null, "Log in successful", "Success", JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
+            new MyBeerForm(token);
+        } else {
+            JOptionPane.showMessageDialog(null, "Log in failure", "Error", ERROR_MESSAGE);
+        }
     }
 }
