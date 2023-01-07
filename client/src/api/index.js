@@ -18,5 +18,7 @@ export const updateBeer = (id, updatedBeer) => API.patch(`${'/beers'}/${id}`, up
 export const deleteBeer = (id) => API.delete(`${'/beers'}/${id}`);
 export const likeBeer = (id) => API.patch(`${'/beers'}/${id}/likeBeer`);
 
+export const createReview = (newReview) => API.post('/reviews', newReview);
+
 export const signIn = (formData) => API.post('/users/signin', formData);
 export const signUp = (formData) => API.post('/users/signup', formData);

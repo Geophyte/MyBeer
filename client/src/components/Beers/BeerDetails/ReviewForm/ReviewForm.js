@@ -2,29 +2,29 @@ import { Button, Paper, TextField, Typography } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from "react-redux";
-import { createBeer, updateBeer } from "../../../../actions/beers";
+import { createReview } from "../../../../actions/reviews";
 
 import useStyles from './styles';
 
 const ReviewForm = ({ currentId }) => {
-    const [beerData, setBeerData] = useState({ title: '', message: '', categories:'', selectedFile: '' });
+    const [reviewData, setReviewData] = useState({ title: '', message: '' });
     const beer = useSelector((state) => currentId ? (state.beers instanceof Array ? state.beers.find((p) => p._id ===currentId): state.beers.beers.find((p) => p._id ===currentId)) : null);
     console.log(beer)
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
 
-    useEffect(() => {
-        if(beer) setBeerData(beer);
-    }, [beer])
+    /* useEffect(() => {
+        if(beer) setReviewData(beer);
+    }, [beer]) */
 
     const handleSubmit = (e) => {
         e.preventDefault(); //not to get refresh in the browser
 
-        if(currentId) {
-            dispatch(updateBeer(currentId, { ...beerData, name: user?.result?.name }));
+        if(0==1) {
+            //dispatch(updateBeer(currentId, { ...reviewData, name: user?.result?.name }));
         } else {
-            dispatch(createBeer({ ...beerData, name: user?.result?.name }));
+            dispatch(createReview({ ...reviewData, name: user?.result?.name, beer: currentId }));
         }
         clear();
     }
@@ -38,24 +38,15 @@ const ReviewForm = ({ currentId }) => {
     }
 
     const clear = () => {
-        //setCurrentId(null);
-        setBeerData({ title: '', message: '', categories:'', selectedFile: '' });
+        setReviewData({ title: '', message: '' });
     }
 
     return (
         <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit} >
-                <Typography variant="h6">{currentId ? 'Editing' : 'Adding'} a Beer</Typography>
-                <TextField name="name" variant="outlined" label="Name" fullWidth value={beerData.title} onChange={(e) => setBeerData({ ...beerData, title: e.target.value })} />
-                <TextField name="description" variant="outlined" label="Description" fullWidth value={beerData.message} onChange={(e) => setBeerData({ ...beerData, message: e.target.value })} />
-                <TextField name="categories" variant="outlined" label="Category" fullWidth value={beerData.categories} onChange={(e) => setBeerData({ ...beerData, categories: e.target.value.split(",") })} />
-                <div className={classes.fileInput}>
-                    <FileBase
-                        type="file"
-                        multiple={false}
-                        onDone={({base64}) => setBeerData({ ...beerData, selectedFile: base64})}
-                    />
-                </div>
+                <Typography variant="h6">{currentId ? 'Editing' : 'Adding'} Review</Typography>
+                <TextField name="name" variant="outlined" label="Name" fullWidth value={reviewData.title} onChange={(e) => setReviewData({ ...reviewData, title: e.target.value })} />
+                <TextField name="description" variant="outlined" label="Description" fullWidth value={reviewData.message} onChange={(e) => setReviewData({ ...reviewData, message: e.target.value })} />
                 <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>
                 <Button variant="contained" color="secondary" size="small" onClick={clear} fullWidth>Clear</Button>
             </form>

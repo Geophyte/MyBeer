@@ -33,6 +33,7 @@ export const getBeersBySearch = async (req, res) => {
 
 export const createBeer = async (req, res) => {
     const beer = req.body;
+    console.log(beer)
 
     const newBeer = new Beer({ ...beer, creator: req.userId, createdAt: new Date().toISOString() });
     try {
