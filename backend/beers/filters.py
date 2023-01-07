@@ -27,8 +27,8 @@ class CommentFilter(filters.FilterSet):
 
 
 class BeerFilter(filters.FilterSet):
-    category = filters.CharFilter(field_name='category__name', lookup_expr='exact')
-    name = filters.CharFilter(field_name='name', lookup_expr='exact')
+    category = filters.CharFilter(field_name='category__name', lookup_expr='icontains')
+    name = filters.CharFilter(field_name='name', lookup_expr='icontains')
 
     class Meta:
         model = Beer
