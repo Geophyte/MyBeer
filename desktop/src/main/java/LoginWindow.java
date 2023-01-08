@@ -55,6 +55,8 @@ public class LoginWindow extends JFrame {
         logInButton.addActionListener(e->{
             login();
         });
+
+        loginUsernameField.requestFocus();
     }
 
     private void initSignupFields() {
@@ -109,6 +111,12 @@ public class LoginWindow extends JFrame {
         params.add(new BasicNameValuePair("password", password));
 
         if (Backend.post(Backend.signupURL, params) != null) {
+            signupFirstNameField.setText("");
+            signupLastNameField.setText("");
+            signupEMailField.setText("");
+            signupUsernameField.setText("");
+            signupPasswordField.setText("");
+            signupConfPasswordField.setText("");
             JOptionPane.showMessageDialog(null, "Sign up successful", "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Sign up failure", "Error", ERROR_MESSAGE);
@@ -133,6 +141,7 @@ public class LoginWindow extends JFrame {
             new MyBeerForm(token);
         } else {
             JOptionPane.showMessageDialog(null, "Log in failure", "Error", ERROR_MESSAGE);
+            loginPasswordField.setText("");
         }
     }
 }

@@ -1,4 +1,4 @@
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
 
 import javax.json.*;
 import javax.swing.*;
@@ -6,12 +6,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.StringReader;
+import java.net.URISyntaxException;
+
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
 public class MyBeerForm {
     private JTextField searchField;
@@ -57,6 +57,22 @@ public class MyBeerForm {
     }
 
     private void initSearchPanel() {
+        final ActionListener searchListener = e->{
+            try {
+                URIBuilder builder = new URIBuilder(Backend.dataURL + "beers/");
+
+                String searchName = searchField.getText();
+                if(!searchName.equals("Search") && !searchName.isBlank() && !searchName.isEmpty())
+                    builder.addParameter("name", searchName);
+                if(searchCategoryComboBox.isVisible())
+                    builder.addParameter("category", (String) searchCategoryComboBox.getItemAt(searchCategoryComboBox.getSelectedIndex()));
+
+                loadBeers(String.valueOf(builder.build()));
+            } catch (URISyntaxException ex) {
+                throw new RuntimeException(ex);
+            }
+        };
+
         searchField.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -72,27 +88,13 @@ public class MyBeerForm {
                 }
             }
         });
-        searchField.addActionListener(e->System.out.printf("Searching for %s!%n", searchField.getText()));
+        searchField.addActionListener(searchListener);
 
-        ImageIcon searchIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("loupe.png").getImage(), 30, 30));
+        ImageIcon searchIcon = new ImageIcon("loupe20x20.png");
         searchButton.setIcon(searchIcon);
-        searchButton.addActionListener(e->{
-            System.out.println("Searching");
-            String name = "";
-            String searchName = searchField.getText();
-            if(!searchName.equals("Search") && !searchName.isBlank() && !searchName.isEmpty())
-                name = "?name=" + searchField.getText();
-            String category = "";
-            if(searchCategoryComboBox.isVisible())
-            {
-                category = "?category=" + (String) searchCategoryComboBox.getItemAt(searchCategoryComboBox.getSelectedIndex());
-                if(!name.isEmpty()) name += "&";
-            }
+        searchButton.addActionListener(searchListener);
 
-            loadBeers(Backend.dataURL + "beers/" + name + category);
-        });
-
-        ImageIcon filterIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("filter.png").getImage(), 30, 30));
+        ImageIcon filterIcon = new ImageIcon("filter20x20.png");
         filterButton.setIcon(filterIcon);
         filterButton.addActionListener(e->{
             searchCategoryComboBox.setVisible(!searchCategoryComboBox.isVisible());
@@ -110,15 +112,15 @@ public class MyBeerForm {
     }
 
     private void initUserPanel() {
-        ImageIcon imgIcon = new ImageIcon(Utility.getScaledImage(new ImageIcon("user.png").getImage(), 20, 20));
+        ImageIcon imgIcon = new ImageIcon("user20x20.png");
         userButton.setIcon(imgIcon);
 
         String responseString = Backend.getJsonString(Backend.userURL, token);
         if(responseString != null) {
             JsonReader reader = Json.createReader(new StringReader(responseString));
-            currUserData = reader.readObject();
+            currUserData = reader.readObject().getJsonObject("user_info");
 
-            usernameLabel.setText(currUserData.getJsonObject("user_info").getString("username"));
+            usernameLabel.setText(currUserData.getString("username"));
         }
 
         userButton.addActionListener(e->{
@@ -163,6 +165,16 @@ public class MyBeerForm {
             int rating = ratingComboBox.getSelectedIndex() + 1;
             String title = titleFiled.getText();
             String content = reviewArea.getText();
+
+            if(title.isEmpty() || title.isBlank())
+            {
+                JOptionPane.showMessageDialog(null, "Review needs non empty title", "Error", ERROR_MESSAGE);
+                return;
+            }
+            if(content.isEmpty() || content.isBlank()) {
+                JOptionPane.showMessageDialog(null, "Review needs non empty content", "Error", ERROR_MESSAGE);
+                return;
+            }
 
             String json = "{\"title\": \"" + title + "\"," +
                     "  \"content\": \"" + content +"\"," +
@@ -214,18 +226,19 @@ public class MyBeerForm {
         String name = beerObject.getString("name");
         String description = beerObject.getString("description").replaceAll("\n", "<br>");
 
-        String rating = "";
+        String rating = "-";
         JsonValue ratingValue = beerObject.get("rating");
-        if(ratingValue != null && ratingValue.getValueType() == JsonValue.ValueType.NUMBER) {
-            rating = String.valueOf(beerObject.getJsonNumber("rating").doubleValue());
-        } else {
-            rating = "-";
+        if(!ratingValue.toString().equals("null")) {
+            rating = beerObject.getString("rating");
         }
+
+        String category = beerObject.getJsonObject("category").getString("name");
 
         String html = "<html><body style='width: %1spx'>" +
                 "<h1>" + name + "</h1>" +
+                "<strong><p>Kategoria: " + category + "</p>" +
+                "<p>Ocena: " + rating + " / 10 </p></strong>" +
                 "<p>%s</p>" +
-                "<p>Ocena: " + rating + " / 10 <p>" +
                 "</html>";
         beerInfoPane.setContentType("text/html");
         beerInfoPane.setText(String.format(html, 300, description));
@@ -276,6 +289,10 @@ public class MyBeerForm {
 
     public void reloadReviewsAndComments() {
         loadReviewsAndComments(currBeer);
+    }
+
+    public JTree getCommentTree() {
+        return commentTree;
     }
 }
 

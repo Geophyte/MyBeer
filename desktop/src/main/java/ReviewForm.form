@@ -7,7 +7,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="54243" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+      <grid id="54243" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag weightx="0.0" weighty="0.0"/>
@@ -15,18 +15,41 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="94503" class="javax.swing.JButton" binding="authorButton">
-            <constraints/>
-            <properties>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="a956c" class="javax.swing.JLabel" binding="ratingLabel">
-            <constraints/>
-            <properties>
-              <text value="Label"/>
-            </properties>
-          </component>
+          <grid id="1d698" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="0">
+            <constraints border-constraint="West"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="94503" class="javax.swing.JButton" binding="authorButton">
+                <constraints/>
+                <properties>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="6a955" class="javax.swing.JLabel" binding="titleLabel">
+                <constraints/>
+                <properties>
+                  <font size="14"/>
+                  <text value="Label"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="cf143" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="East"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="a956c" class="javax.swing.JLabel" binding="ratingLabel">
+                <constraints/>
+                <properties>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <text value="Label"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
       <component id="829f7" class="javax.swing.JTextPane" binding="reviewPane">
@@ -48,12 +71,31 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="d7558" class="javax.swing.JButton" binding="addCommentButton">
+          <grid id="915e5" layout-manager="GridBagLayout">
             <constraints/>
-            <properties>
-              <text value="Post comment"/>
-            </properties>
-          </component>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="d7558" class="javax.swing.JButton" binding="addCommentButton">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="Post comment"/>
+                </properties>
+              </component>
+              <component id="82673" class="javax.swing.JButton" binding="commentsButton">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="Show Comments"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
           <scrollpane id="1f22b">
             <constraints/>
             <properties>
