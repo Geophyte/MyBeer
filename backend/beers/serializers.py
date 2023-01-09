@@ -34,7 +34,7 @@ class BeerReadSerializer(BeerSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = "__all__"
+        fields = ('id', 'title', 'content', 'author', 'beer', 'rating')
 
     def create(self, validated_data):
         review = Review(
@@ -58,7 +58,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = "__all__"
+        fields = ('id', 'author', 'review', 'content')
 
     def create(self, validated_data):
         comment = Comment(

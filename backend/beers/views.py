@@ -52,7 +52,7 @@ class BeerViewSet(viewsets.ModelViewSet):
     beers/?category=<str:category>
     beers/?name=<str:name>
     """
-    queryset = Beer.objects.filter()
+    queryset = Beer.objects.filter(active=True)
     serializer_class = BeerSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = BeerFilter
@@ -78,7 +78,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     reviews/beer_name=
     reviews/beer_id=
     """
-    queryset = Review.objects.filter()
+    queryset = Review.objects.filter(active=True)
     serializer_class = ReviewSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ReviewFilter
@@ -98,7 +98,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     comments/<int:id>/
     comment/?review=
     """
-    queryset = Comment.objects.all()
+    queryset = Comment.objects.filter(active=True, review__active=True)
     serializer_class = CommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = CommentFilter
