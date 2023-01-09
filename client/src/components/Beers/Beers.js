@@ -10,7 +10,7 @@ const Beers = ({ setCurrentId, setIsMainPage }) => {
     const { beers, isLoading } = useSelector((state) => state.beers);
     const classes = useStyles();
 
-    if(!beers?.length && !isLoading) return 'No beers';
+    if(!beers && !isLoading) return 'No beers';
 
     return (
         isLoading ? <CircularProgress /> : (

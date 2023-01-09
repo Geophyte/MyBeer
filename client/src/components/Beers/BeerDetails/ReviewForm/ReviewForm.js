@@ -9,7 +9,6 @@ import useStyles from './styles';
 const ReviewForm = ({ currentId }) => {
     const [reviewData, setReviewData] = useState({ title: '', message: '' });
     const beer = useSelector((state) => currentId ? (state.beers instanceof Array ? state.beers.find((p) => p._id ===currentId): state.beers.beers.find((p) => p._id ===currentId)) : null);
-    console.log(beer)
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
@@ -44,7 +43,7 @@ const ReviewForm = ({ currentId }) => {
     return (
         <Paper className={classes.paper} elevation={6}>
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit} >
-                <Typography variant="h6">{currentId ? 'Editing' : 'Adding'} Review</Typography>
+                <Typography variant="h6">Adding Review</Typography>
                 <TextField name="name" variant="outlined" label="Name" fullWidth value={reviewData.title} onChange={(e) => setReviewData({ ...reviewData, title: e.target.value })} />
                 <TextField name="description" variant="outlined" label="Description" fullWidth value={reviewData.message} onChange={(e) => setReviewData({ ...reviewData, message: e.target.value })} />
                 <Button className={classes.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Submit</Button>

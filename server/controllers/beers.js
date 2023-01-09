@@ -24,6 +24,7 @@ export const getBeersBySearch = async (req, res) => {
         const title = new RegExp(searchQuery, 'i'); // ignore size of letters (Test=TEST=TeST)
 
         const beers = await Beer.find({ $or: [ { title }, { categories:{ $in: categories.split(',')} }] });
+        console.log(beers)
 
         res.json({ data: beers });
     } catch (error) {

@@ -17,22 +17,26 @@ import Review from "../models/review.js";
     }
 }
 
-export const getBeersBySearch = async (req, res) => {
-    const { searchQuery, categories } = req.query
+ */
+
+export const getReviews = async (req, res) => {
+    //const { searchQuery, categories } = req.query
 
     try {
-        const title = new RegExp(searchQuery, 'i'); // ignore size of letters (Test=TEST=TeST)
+        //const title = new RegExp(searchQuery, 'i'); // ignore size of letters (Test=TEST=TeST)
 
-        const beers = await Beer.find({ $or: [ { title }, { categories:{ $in: categories.split(',')} }] });
+        const reviews = await Review.find();
+        console.log(reviews)
 
-        res.json({ data: beers });
+        res.json({ data: reviews });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
-} */
+}
 
 export const createReview = async (req, res) => {
     const review = req.body;
+    console.log("dodawanie dzaiła")
 
     const newReview = new Review({ ...review, creator: req.userId, createdAt: new Date().toISOString() });
     try {

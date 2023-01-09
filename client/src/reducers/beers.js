@@ -1,6 +1,6 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, LIKE } from '../constants/actionTypes';
+import { FETCH_ALL, CREATE, UPDATE, DELETE, FETCH_BY_SEARCH, START_LOADING, END_LOADING, LIKE, FETCH_REVIEWS } from '../constants/actionTypes';
 
-const beersReducer =  (state = { isLoading: true, beers: [] }, action) => {
+const beersReducer = (state = { isLoading: true, beers: [], reviews: [] }, action) => {
     switch (action.type) {
         case START_LOADING:
             return {
@@ -23,6 +23,11 @@ const beersReducer =  (state = { isLoading: true, beers: [] }, action) => {
             return {
                 ...state,
                 beers: action.payload.data,
+            }
+        case FETCH_REVIEWS:
+            return {
+                ...state,
+                reviews: action.payload.data,
             }
         case LIKE:
             return { ...state, beers: state.beers.map((beer) => (beer._id === action.payload._id ? action.payload : beer)) };
