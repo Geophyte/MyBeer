@@ -26,7 +26,7 @@ class Beer(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=1)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1, editable=False)
-    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True, default=None)
+    image_url = models.ImageField(upload_to=upload_to, blank=True, null=True)
     # active = models.BooleanField(default=False)
     rating = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True, editable=False)
 

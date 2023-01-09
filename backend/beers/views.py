@@ -9,7 +9,6 @@ from beers.permissions import AuthorPermission
 from beers.serializers import BeerSerializer, BeerReadSerializer, ReviewSerializer, CommentSerializer, \
     CategorySerializer
 from django_filters import rest_framework as filters
-
 from users.serializers import UserSerializer
 
 
@@ -21,6 +20,9 @@ def api_overview(request):
 
 class UserViewSet(mixins.RetrieveModelMixin,
                   viewsets.GenericViewSet):
+    """
+    users/<int:id>/
+    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -29,6 +31,10 @@ class UserViewSet(mixins.RetrieveModelMixin,
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
+    """
+    categories/
+    categories/<int:id>/
+    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -40,6 +46,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class BeerViewSet(viewsets.ModelViewSet):
+    """
+    beers/
+    beers/<int:id>/
+    beers/?category=<str:category>
+    beers/?name=<str:name>
+    """
     queryset = Beer.objects.filter()
     serializer_class = BeerSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -60,6 +72,12 @@ class BeerViewSet(viewsets.ModelViewSet):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
+    """
+    reviews/
+    reviews/<int:id>/
+    reviews/beer_name=
+    reviews/beer_id=
+    """
     queryset = Review.objects.filter()
     serializer_class = ReviewSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -75,6 +93,11 @@ class ReviewViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """
+    comments/
+    comments/<int:id>/
+    comment/?review=
+    """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)

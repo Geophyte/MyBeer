@@ -17,7 +17,8 @@ class BeerSerializer(serializers.ModelSerializer):
         beer = Beer(name=validated_data['name'],
                     description=validated_data['description'],
                     category=validated_data['category'],
-                    created_by=self.context['request'].user)
+                    created_by=self.context['request'].user,
+                    image_url=validated_data['image_url'])
         beer.save()
         return beer
 
