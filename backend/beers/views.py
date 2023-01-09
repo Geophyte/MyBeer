@@ -78,7 +78,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     reviews/beer_name=
     reviews/beer_id=
     """
-    queryset = Review.objects.filter(active=True)
+    queryset = Review.objects.filter(active=True, beer__active=True)
     serializer_class = ReviewSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ReviewFilter
