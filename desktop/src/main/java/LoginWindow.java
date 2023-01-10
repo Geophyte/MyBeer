@@ -137,8 +137,9 @@ public class LoginWindow extends JFrame {
             JsonObject responseJson = reader.readObject();
             String token = responseJson.getString("token");
             JOptionPane.showMessageDialog(null, "Log in successful", "Success", JOptionPane.INFORMATION_MESSAGE);
-            setVisible(false);
             new MyBeerForm(token);
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Log in failure", "Error", ERROR_MESSAGE);
             loginPasswordField.setText("");

@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
-public class MyBeerForm {
+public class MyBeerForm extends JFrame {
     private JTextField searchField;
     private JButton searchButton;
     private JButton filterButton;
@@ -31,20 +31,22 @@ public class MyBeerForm {
     private JComboBox ratingComboBox;
     private JTextField titleFiled;
     private JTextArea reviewArea;
+    private JButton logOutButton;
+    private JButton addBeerButton;
     private JsonObject currUserData;
+    private JsonArray beersData;
+    private JsonArray categoriesData;
     private String token;
     private JsonObject currBeer;
-    private JsonArray beersData;
 
     MyBeerForm(String _token) {
-        JFrame frame = new JFrame("MyBeer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setIconImage(new ImageIcon("beer20x20.png").getImage());
-        frame.setMinimumSize(new Dimension(800, 600));
-        frame.add(mainPanel);
-        frame.pack();
-        frame.setVisible(true);
-
+        setTitle("MyBeer");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setIconImage(new ImageIcon("beer20x20.png").getImage());
+        setMinimumSize(new Dimension(800, 600));
+        add(mainPanel);
+        pack();
+        setVisible(true);
 
         token = _token;
 
@@ -90,7 +92,7 @@ public class MyBeerForm {
         });
         searchField.addActionListener(searchListener);
 
-        ImageIcon searchIcon = new ImageIcon("loupe20x20.png");
+        ImageIcon searchIcon = new ImageIcon("search.png");
         searchButton.setIcon(searchIcon);
         searchButton.addActionListener(searchListener);
 
@@ -104,9 +106,9 @@ public class MyBeerForm {
         String responseString = Backend.getJsonString(Backend.dataURL + "categories", token);
         if(responseString != null) {
             JsonReader reader = Json.createReader(new StringReader(responseString));
-            JsonArray array = reader.readArray();
-            for(int i=0; i<array.size(); i++) {
-                searchCategoryComboBox.addItem(array.getJsonObject(i).getString("name"));
+            categoriesData = reader.readArray();
+            for(int i=0; i<categoriesData.size(); i++) {
+                searchCategoryComboBox.addItem(categoriesData.getJsonObject(i).getString("name"));
             }
         }
     }
@@ -127,6 +129,13 @@ public class MyBeerForm {
             UserWindow wnd = new UserWindow(currUserData);
             wnd.setLocationRelativeTo(userButton);
         });
+
+        logOutButton.addActionListener(e->{
+            Backend.post(Backend.logoutURL, token);
+            new LoginWindow();
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            dispose();
+        });
     }
 
     private void initBeerPanel() {
@@ -144,6 +153,10 @@ public class MyBeerForm {
             }
         });
         beerPane.getViewport().add(beerList);
+
+        addBeerButton.addActionListener(e->{
+            new AddBeerWindow(token, this);
+        });
 
         // Set up beer page
         beerInfoPane.setEditable(false);
@@ -215,7 +228,6 @@ public class MyBeerForm {
         // display image
         BufferedImage image = Backend.getImage(beerObject.getString("image_url"));
         if(image != null) {
-
             beerImage.setIcon(new ImageIcon(Utility.getScaledImage(image, 200, 200)));
         }
         else {
@@ -289,6 +301,14 @@ public class MyBeerForm {
 
     public void reloadReviewsAndComments() {
         loadReviewsAndComments(currBeer);
+    }
+
+    public void reloadBeers() {
+        loadBeers(Backend.dataURL + "/beers");
+    }
+
+    public JsonArray getCategoriesData() {
+        return categoriesData;
     }
 
     public JTree getCommentTree() {

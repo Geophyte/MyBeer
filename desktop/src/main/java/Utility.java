@@ -1,10 +1,5 @@
-import org.apache.http.HttpResponse;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utility {
     public static Image getScaledImage(Image srcImg, int w, int h) {

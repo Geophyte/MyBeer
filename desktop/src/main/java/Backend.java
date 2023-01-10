@@ -2,11 +2,15 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -17,10 +21,8 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.List;
 
 public class Backend {
@@ -67,6 +69,27 @@ public class Backend {
         return null;
     }
 
+    public static synchronized boolean post(String url, String token) {
+        HttpPost request = new HttpPost(url);
+        try {
+            request.setEntity(new ByteArrayEntity(new byte[0]));
+            request.setHeader("Authorization", "Token " + token);
+
+            CloseableHttpResponse response = client.execute(request);
+            if(isResponseSuccessful(response)) {
+                return true;
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return false;
+    }
+
     public static synchronized String post(String url, List<NameValuePair> params) {
         HttpPost request = new HttpPost(url);
         try {
@@ -94,13 +117,41 @@ public class Backend {
             request.setHeader("Authorization", "Token " + token);
 
             CloseableHttpResponse response = client.execute(request);
-            System.out.println(request);
-            System.out.println(response);
-            System.out.println(json);
             if(isResponseSuccessful(response)) {
                 String stringResponse = EntityUtils.toString(response.getEntity());
-                System.out.println(stringResponse);
                 return stringResponse;
+            }
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (ClientProtocolException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    public static synchronized String postBeer(String url, String name, String description, int category, File image, boolean active, String token) {
+        HttpPost request = new HttpPost(url);
+        request.setHeader("Authorization", "Token " + token);
+        try {
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.addTextBody("name", name);
+            builder.addTextBody("description", description);
+            builder.addTextBody("category", "" + category);
+            //builder.addTextBody("active", "" + active);
+
+            if(image != null) {
+                builder.addBinaryBody("image_url", image);
+            } else {
+                builder.addBinaryBody("image_url", new byte[0]);
+            }
+
+            request.setEntity(builder.build());
+            CloseableHttpResponse response = client.execute(request);
+            if(isResponseSuccessful(response)) {
+                return EntityUtils.toString(response.getEntity());
             }
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
