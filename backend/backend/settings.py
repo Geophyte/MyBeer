@@ -83,8 +83,8 @@ DATABASES = {
         'USER': 'user',
         'PASSWORD': 'password',
                                 # nie pytajcie mnie dlaczego ale :
-        # 'HOST': 'db',         # to jest dla dockera
-        'HOST': 'localhost',    # to jest dla uruchomienia w pycharmie
+        'HOST': 'db',         # to jest dla dockera
+        # 'HOST': 'localhost',    # to jest dla uruchomienia w pycharmie
         'PORT': '5432',
     }
 }

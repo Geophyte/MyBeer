@@ -39,7 +39,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
     def get_permissions(self):
-        # return [permissions.AllowAny(),]
         if self.request.method in ['GET']:
             return [permissions.IsAuthenticated(), ]
         return [permissions.IsAdminUser(), ]
@@ -62,7 +61,6 @@ class BeerViewSet(viewsets.ModelViewSet):
         return BeerSerializer
 
     def get_permissions(self):
-        # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
         return [permissions.IsAdminUser(), ]
@@ -86,7 +84,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     filterset_class = ReviewFilter
 
     def get_permissions(self):
-        # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
         elif self.request.method in ['PATCH', 'DELETE']:
@@ -112,7 +109,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     filterset_class = CommentFilter
 
     def get_permissions(self):
-        # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
         elif self.request.method in ['PATCH', 'DELETE']:

@@ -1,7 +1,5 @@
 from django.urls import path, include
 from rest_framework import routers
-
-from beers import views
 from beers.views import CategoryViewSet, BeerViewSet, CommentViewSet, ReviewViewSet, UserViewSet
 
 router = routers.DefaultRouter()

@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from beers.models import Review, Beer, Comment
-from .helpers import set_up_database
+from .helpers import set_up_database, activate, deactivate
 
 
 class ReviewEndpointTestCase(APITestCase):
@@ -46,33 +46,14 @@ class ReviewEndpointTestCase(APITestCase):
         token = self.client.post(self.login_url, data=data).json()['token']
         return token
 
-    def activate_beers(self):
-        for beer in Beer.objects.all():
-            beer.active = True
-            beer.save()
-
-    def deactivate_beers(self):
-        for beer in Beer.objects.all():
-            beer.active = False
-            beer.save()
-
-    def activate_reviews(self):
-        for review in Review.objects.all():
-            review.active = True
-            review.save()
-
-    def deactivate_reviews(self):
-        for review in Review.objects.all():
-            review.active = False
-            review.save()
 
     def test_get_reviews_all_by_not_authenticated_user(self):
         response = self.client.get('/api/v1/reviews/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_reviews_all_not_active_beer_not_active_review_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.deactivate_reviews()
+        deactivate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get('/api/v1/reviews/',
@@ -81,8 +62,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_all_not_active_beer_active_review_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.activate_reviews()
+        deactivate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get('/api/v1/reviews/',
@@ -91,8 +72,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_all_active_beer_not_active_review_by_authenticated_user(self):
-        self.activate_beers()
-        self.deactivate_reviews()
+        activate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get('/api/v1/reviews/',
@@ -101,8 +82,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_all_active_beer_active_review_by_authenticated_user(self):
-        self.activate_beers()
-        self.activate_reviews()
+        activate(Beer)
+        activate(Review)
         token = self.get_token(self.user_1)
         response = self.client.get('/api/v1/reviews/',
                                    **{"HTTP_AUTHORIZATION": f"Token {token}"})
@@ -114,8 +95,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_review_one_not_active_beer_not_active_review_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.deactivate_reviews()
+        deactivate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/{self.review_1.id}/',
@@ -123,8 +104,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_review_one_not_active_beer_active_review_by_authenticated_user(self):
-        self.activate_beers()
-        self.deactivate_reviews()
+        activate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/{self.review_1.id}/',
@@ -132,8 +113,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_review_one_active_beer_not_active_review_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.activate_reviews()
+        deactivate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/{self.review_1.id}/',
@@ -141,8 +122,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_review_one_active_beer_active_review_by_authenticated_user(self):
-        self.activate_beers()
-        self.activate_reviews()
+        activate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/{self.review_1.id}/',
@@ -154,8 +135,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_reviews_not_active_beer_not_active_review_filtered_by_beer_name_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.deactivate_reviews()
+        deactivate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_name=Perła',
@@ -164,8 +145,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_not_active_beer_active_review_filtered_by_beer_name_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.activate_reviews()
+        deactivate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_name=Perła',
@@ -174,8 +155,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_active_beer_not_active_review_filtered_by_beer_name_by_authenticated_user(self):
-        self.activate_beers()
-        self.deactivate_reviews()
+        activate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_name=Perła',
@@ -184,8 +165,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_active_beer_active_review_by_filtered_by_beer_name_authenticated_user(self):
-        self.activate_beers()
-        self.activate_reviews()
+        activate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_name=Perła',
@@ -198,8 +179,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_get_reviews_not_active_beer_not_active_review_filtered_by_beer_id_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.deactivate_reviews()
+        deactivate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_id={self.beer_1.id}',
@@ -208,8 +189,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_not_active_beer_active_review_filtered_by_beer_id_by_authenticated_user(self):
-        self.deactivate_beers()
-        self.activate_reviews()
+        deactivate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_id={self.beer_1.id}',
@@ -218,8 +199,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_active_beer_not_active_review_filtered_by_beer_id_by_authenticated_user(self):
-        self.activate_beers()
-        self.deactivate_reviews()
+        activate(Beer)
+        deactivate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_id={self.beer_1.id}',
@@ -228,8 +209,8 @@ class ReviewEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_reviews_active_beer_active_review_by_filtered_by_beer_id_authenticated_user(self):
-        self.activate_beers()
-        self.activate_reviews()
+        activate(Beer)
+        activate(Review)
 
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/reviews/?beer_id={self.beer_1.id}',

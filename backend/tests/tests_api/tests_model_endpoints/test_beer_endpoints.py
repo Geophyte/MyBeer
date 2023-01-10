@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from beers.models import Beer
-from .helpers import set_up_database
+from .helpers import set_up_database, activate
 
 
 class BeerEndpointTestCase(APITestCase):
@@ -46,11 +46,6 @@ class BeerEndpointTestCase(APITestCase):
         token = self.client.post(self.login_url, data=data).json()['token']
         return token
 
-    def activate_beers(self):
-        for beer in Beer.objects.all():
-            beer.active = True
-            beer.save()
-
     def test_get_beers_all_by_not_authenticated_user(self):
         response = self.client.get('/api/v1/beers/')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -63,7 +58,7 @@ class BeerEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_beers_all_active_by_authenticated_user(self):
-        self.activate_beers()
+        activate(Beer)
         token = self.get_token(self.user_1)
         response = self.client.get('/api/v1/beers/',
                                    **{"HTTP_AUTHORIZATION": f"Token {token}"})
@@ -81,7 +76,7 @@ class BeerEndpointTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_beer_one_active_by_authenticated_user(self):
-        self.activate_beers()
+        activate(Beer)
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/beers/{self.beer_1.id}/',
                                    **{"HTTP_AUTHORIZATION": f"Token {token}"})
@@ -99,7 +94,7 @@ class BeerEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_beer_active_filtered_by_category_by_authenticated_user(self):
-        self.activate_beers()
+        activate(Beer)
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/beers/?category=Lager',
                                    **{"HTTP_AUTHORIZATION": f"Token {token}"})
@@ -118,7 +113,7 @@ class BeerEndpointTestCase(APITestCase):
         self.assertEqual(len(response.data), 0)
 
     def test_get_beer_active_filtered_by_name_by_authenticated_user(self):
-        self.activate_beers()
+        activate(Beer)
         token = self.get_token(self.user_1)
         response = self.client.get(f'/api/v1/beers/?name=Perła',
                                    **{"HTTP_AUTHORIZATION": f"Token {token}"})

@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from knox import views as knox_view
 from users.views import RegisterView, UserView, LoginView
 
