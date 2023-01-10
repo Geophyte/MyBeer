@@ -65,8 +65,6 @@ class BeerViewSet(viewsets.ModelViewSet):
         # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
-        elif self.request.method in ['PATCH', 'DELETE']:
-            return [permissions.IsAdminUser(), ]
         return [permissions.IsAdminUser(), ]
 
     def get_queryset(self):

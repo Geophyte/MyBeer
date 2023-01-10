@@ -24,7 +24,7 @@ class Category(models.Model):
 class Beer(models.Model):
     name = models.CharField(max_length=50, null=False, unique=True)
     description = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=1)
+    category = models.ForeignKey(Category, on_delete=models.SET_DEFAULT, default=None, null=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, default=1, editable=False)
     image_url = models.ImageField(upload_to=upload_to, null=True, default='images/default.png')
     active = models.BooleanField(default=False)

@@ -14,8 +14,9 @@ class BeerSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'description', 'category', 'created_by', 'image_url', 'rating', 'active')
 
     def create(self, validated_data):
+        if not self.context['request'].user.is_staff:
+            validated_data['active'] = False
         beer = Beer(**validated_data)
-
         beer.created_by = self.context['request'].user
         beer.save()
         return beer
@@ -24,6 +25,7 @@ class BeerSerializer(serializers.ModelSerializer):
         fields = super().get_fields()
         if self.instance:
             fields['created_by'].read_only = True
+            fields['rating'].read_only = True
         return fields
 
 
@@ -37,12 +39,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'content', 'author', 'beer', 'rating', 'active')
 
     def create(self, validated_data):
-        review = Review(
-            title=validated_data['title'],
-            content=validated_data['content'],
-            rating=validated_data['rating'],
-            author=self.context['request'].user,
-            beer=validated_data['beer'])
+        review = Review(**validated_data)
+        review.author = self.context['request'].user
+        review.active = True
         review.save()
         return review
 
@@ -57,14 +56,12 @@ class ReviewSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'review', 'content')
+        fields = ('id', 'author', 'review', 'content', 'active')
 
     def create(self, validated_data):
-        comment = Comment(
-            author=self.context['request'].user,
-            review=validated_data['review'],
-            content=validated_data['content']
-        )
+        comment = Comment(**validated_data)
+        comment.author = self.context['request'].user
+        comment.active = True
         comment.save()
         return comment
 
