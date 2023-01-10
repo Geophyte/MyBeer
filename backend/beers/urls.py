@@ -5,11 +5,11 @@ from beers import views
 from beers.views import CategoryViewSet, BeerViewSet, CommentViewSet, ReviewViewSet, UserViewSet
 
 router = routers.DefaultRouter()
-router.register('categories', CategoryViewSet)
-router.register('beers', BeerViewSet)
-router.register('reviews', ReviewViewSet)
-router.register('comments', CommentViewSet)
-router.register('users', UserViewSet)
+router.register('categories', CategoryViewSet, basename='Category')
+router.register('beers', BeerViewSet, basename='Beer')
+router.register('reviews', ReviewViewSet, basename='Review')
+router.register('comments', CommentViewSet, basename='Comment')
+router.register('users', UserViewSet, basename='User')
 urlpatterns = [
     path('', include(router.urls)),
 ]

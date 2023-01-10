@@ -1,6 +1,5 @@
 from django.db import IntegrityError, DataError
 from django.test import TestCase
-
 from beers.models import Category
 
 
@@ -21,6 +20,6 @@ class CategoryTestCase(TestCase):
             Category.objects.create(name=None)
 
     def test_create_category_with_too_long_name(self):
-        name = 'foo' * 20
+        name = 'f' * 51
         with self.assertRaises(DataError):
             Category.objects.create(name=name)

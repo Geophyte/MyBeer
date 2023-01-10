@@ -10,6 +10,7 @@ def set_up_database(test_class):
     # INIT TEST DATABASE
     test_class.user_1 = User.objects.create_user('user_1', 'user_1@example.com', 'password')
     test_class.user_2 = User.objects.create_user('user_2', 'user_2@example.com', 'password')
+    test_class.admin = User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
     test_class.category_1 = Category.objects.create(name='Lager')
     test_class.category_1.save()
@@ -212,9 +213,18 @@ class AuthenticatedUserTestCase(APITestCase):
                                    category=self.category_1,
                                    created_by=self.user_1)
         beer.save()
-        response = self.client.get('/api/v1/beers/?name=name with spaces', **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
+        print(beer.id)
+        token = self.client.post(self.login_url, data={'username': 'admin',
+                                                       'password': 'admin'}).json()['token']
+        resp = self.client.patch(f'/api/v1/beers/{beer.id}/', {'active': True},
+                                 **{"HTTP_AUTHORIZATION": f"Token {token}"})
+        print(resp)
+        response = self.client.get('/api/v1/beers/?name=name with spaces',
+                                   **{"HTTP_AUTHORIZATION": f"Token {self.token}"})
         self.assertEqual(response.status_code, 200)
         name = response.data[0].get('name')
+        active = response.data[0].get('active')
+        self.assertTrue(active)
         self.assertEqual(name, 'name with spaces')
 
     def test_category_list(self):

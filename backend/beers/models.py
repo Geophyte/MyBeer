@@ -30,6 +30,11 @@ class Beer(models.Model):
     active = models.BooleanField(default=False)
     rating = models.DecimalField(max_digits=4, decimal_places=2, default=0, editable=False)
 
+    def delete(self, *args, **kwargs):
+        reviews = Review.objects.filter(beer=self.pk)
+        reviews.delete()
+        super(Beer, self).delete(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -44,7 +49,7 @@ class Review(models.Model):
 
     def save(self, *args, **kwargs):
         super(Review, self).save(*args, **kwargs)
-        reviews = Review.objects.filter(beer=self.beer.pk, active=True)
+        reviews = Review.objects.filter(beer=self.beer.pk, active=True, beer__active=True)
         beer = Beer.objects.get(pk=self.beer.pk)
         if reviews:
             beer.rating = statistics.mean([review.rating for review in reviews])
@@ -53,9 +58,12 @@ class Review(models.Model):
         beer.save()
 
     def delete(self, *args, **kwargs):
+        comments = Comment.objects.filter(review=self.pk)
+        comments.delete()
+
         beer = Beer.objects.get(pk=self.beer.pk)
         super(Review, self).delete(*args, **kwargs)
-        reviews = Review.objects.filter(beer=beer.pk, active=True).exclude(pk=self.pk)
+        reviews = Review.objects.filter(beer=beer.pk, active=True, beer__active=True).exclude(pk=self.pk)
 
         if reviews:
             beer.rating = statistics.mean([review.rating for review in reviews])

@@ -52,7 +52,6 @@ class BeerViewSet(viewsets.ModelViewSet):
     beers/?category=<str:category>
     beers/?name=<str:name>
     """
-    queryset = Beer.objects.filter(active=True)
     serializer_class = BeerSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = BeerFilter
@@ -66,9 +65,15 @@ class BeerViewSet(viewsets.ModelViewSet):
         # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
-        elif self.request.method in ['PUT', 'DELETE']:
+        elif self.request.method in ['PATCH', 'DELETE']:
             return [permissions.IsAdminUser(), ]
         return [permissions.IsAdminUser(), ]
+
+    def get_queryset(self):
+        if self.request.method in ['GET', ]:
+            return Beer.objects.filter(active=True)
+        else:
+            return Beer.objects.all()
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -78,7 +83,6 @@ class ReviewViewSet(viewsets.ModelViewSet):
     reviews/beer_name=
     reviews/beer_id=
     """
-    queryset = Review.objects.filter(active=True, beer__active=True)
     serializer_class = ReviewSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = ReviewFilter
@@ -87,9 +91,15 @@ class ReviewViewSet(viewsets.ModelViewSet):
         # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
-        elif self.request.method in ['PUT', 'DELETE']:
+        elif self.request.method in ['PATCH', 'DELETE']:
             return [AuthorPermission(), ]
         return [permissions.IsAdminUser(), ]
+
+    def get_queryset(self):
+        if self.request.method in ['GET', ]:
+            return Review.objects.filter(active=True, beer__active=True)
+        else:
+            return Review.objects.all()
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -98,7 +108,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     comments/<int:id>/
     comment/?review=
     """
-    queryset = Comment.objects.filter(active=True, review__active=True)
+
     serializer_class = CommentSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = CommentFilter
@@ -107,6 +117,12 @@ class CommentViewSet(viewsets.ModelViewSet):
         # return [permissions.AllowAny(),]
         if self.request.method in ['GET', 'POST']:
             return [permissions.IsAuthenticated(), ]
-        elif self.request.method in ['PUT', 'DELETE']:
+        elif self.request.method in ['PATCH', 'DELETE']:
             return [AuthorPermission(), ]
         return [permissions.IsAdminUser(), ]
+
+    def get_queryset(self):
+        if self.request.method in ['GET', ]:
+            return Comment.objects.filter(active=True, review__active=True, review__beer__active=True)
+        else:
+            return Comment.objects.all()
