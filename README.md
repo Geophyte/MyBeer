@@ -23,18 +23,18 @@ Aplikacja okienkowa znajduje się w branchu *desktop*.
 Stworzenie obrazu Dockera:
 
     cd backend    
-    docker build --tag backend .
+    docker-compose up
 
-Uruchomienie aplikacji:
+Zainicjowanie aplikacji serwerowej:
+    docker exec -it [id_kontenera] bash
+    python manage.py migrate
+    python manage.py createsuperuser
 
-    docker run --publish 8000:8000 backend
+Załadowanie przykładowych danych:
+    cd .. 
+    python init_database.py
 
-Dostęp do aplikacji jest możliwy na localhost
-
-    http://127.0.0.1:8000/
-
-lub poprzez dowolne narzędzie umożliwiające wykonywanie requestów. Podczas testów API korzystaliśmy z Pythona i
-biblioteki requests.
+Film pokazujący użycie powyższych komend
 
 Aplikacja administratora:
 
