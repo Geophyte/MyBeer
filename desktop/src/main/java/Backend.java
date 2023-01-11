@@ -22,6 +22,7 @@ import javax.json.JsonReader;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class Backend {
     public static synchronized String post(String url, List<NameValuePair> params) {
         HttpPost request = new HttpPost(url);
         try {
-            request.setEntity(new UrlEncodedFormEntity(params));
+            request.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
             CloseableHttpResponse response = client.execute(request);
             if(isResponseSuccessful(response)) {
                 return EntityUtils.toString(response.getEntity());
@@ -112,8 +113,8 @@ public class Backend {
     public static synchronized String post(String url, String json, String token) {
         HttpPost request = new HttpPost(url);
         try {
-            request.setEntity(new StringEntity(json));
-            request.setHeader("Content-Type", "application/json");
+            request.setEntity(new StringEntity(json, "UTF-8"));
+            request.setHeader("Content-Type", "application/json; charset=UTF-8");
             request.setHeader("Authorization", "Token " + token);
 
             CloseableHttpResponse response = client.execute(request);
@@ -132,15 +133,15 @@ public class Backend {
         return null;
     }
 
-    public static synchronized String postBeer(String url, String name, String description, int category, File image, boolean active, String token) {
+    public static synchronized String postBeer(String url, String name, String description, int category, File image, String token) {
         HttpPost request = new HttpPost(url);
         request.setHeader("Authorization", "Token " + token);
         try {
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            builder.addTextBody("name", name);
-            builder.addTextBody("description", description);
-            builder.addTextBody("category", "" + category);
-            //builder.addTextBody("active", "" + active);
+            ContentType contentType = ContentType.create("text/plain", Charset.forName("UTF-8"));
+            builder.addTextBody("name", name, contentType);
+            builder.addTextBody("description", description, contentType);
+            builder.addTextBody("category", "" + category, contentType);
 
             if(image != null) {
                 builder.addBinaryBody("image_url", image);

@@ -209,7 +209,10 @@ public class MyBeerForm extends JFrame {
             JsonReader reader = Json.createReader(new StringReader(responseString));
             beersData = reader.readArray();
             loadBeerList();
-            loadBeerPage(0);
+            if(beersData.size() > 0)
+                loadBeerPage(0);
+            else
+                JOptionPane.showMessageDialog(null, "No beers found", "Error", ERROR_MESSAGE);
         }
     }
 

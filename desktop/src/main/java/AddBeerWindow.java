@@ -46,7 +46,7 @@ public class AddBeerWindow extends JFrame {
 
         addImageButton.addActionListener(e->{
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "JPG, PNG, GIF & BMP Images", "jpg", "png", "gif", "bmp");
+                    "JPG, PNG, GIF & BMP Images", "jpg", "png", "gif", "bmp", "jpeg", "jfif");
 
             JFileChooser chooser = new JFileChooser();
             chooser.setFileFilter(filter);
@@ -64,7 +64,7 @@ public class AddBeerWindow extends JFrame {
             JsonObject categoryObject = wnd.getCategoriesData().getJsonObject(categoryComboBox.getSelectedIndex());
             int category = categoryObject.getInt("id");
 
-            if(Backend.postBeer(Backend.dataURL + "beers/", name, description, category, imageFile, true, token) != null) {
+            if(Backend.postBeer(Backend.dataURL + "beers/", name, description, category, imageFile, token) != null) {
                 JOptionPane.showMessageDialog(null, "Beer added", "Success", JOptionPane.INFORMATION_MESSAGE);
                 wnd.reloadBeers();
                 dispose();
