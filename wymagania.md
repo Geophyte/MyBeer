@@ -26,18 +26,18 @@ Proponowana technologia: Django
 
 * Interfejs użytkownika (Ignacy Dąbkowski)
     * ✅ Lista piw
-        * Wyszukiwanie po nazwie
+        * ✅ Wyszukiwanie po nazwie
         * Sortowanie
-        * Filtrowanie
+        * ✅ Filtrowanie
     * ✅ Wyświetlanie pojedynczego piwa
         * ✅ Dane
         * ✅ Recenzje (oceny)
             * ✅ Wyświetlanie komentarzy
-            * Dodawanie komentarzy
-        * Dodawanie recenzji
-    * Dodawanie nowego piwa
-    * Logowanie użytkownika
-    * Rejestracja użytkownika
+            * ✅ Dodawanie komentarzy
+        * ✅ Dodawanie recenzji
+    * ✅ Dodawanie nowego piwa
+    * ✅ Logowanie użytkownika
+    * ✅ Rejestracja użytkownika
 
 * Interakcja z API (Jakub Jażdżyk)
     * Tworzenie danych
