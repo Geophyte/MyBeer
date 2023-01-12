@@ -18,6 +18,10 @@ import java.util.List;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
+/**
+ * AddBeerWindow is a class that extends JFrame and provides a form for adding new beers.
+ * It contains fields for beer name, image, category, and description, as well as buttons for adding the image and submitting the form.
+ */
 public class AddBeerWindow extends JFrame {
     private JTextField nameField;
     private JButton addImageButton;
@@ -27,6 +31,10 @@ public class AddBeerWindow extends JFrame {
     private JButton addBeerButton;
     private File imageFile = null;
 
+    /**
+     * @param token the user's authentication token
+     * @param wnd the MyBeerForm instance, which serves as the main window of the program
+     */
     AddBeerWindow(String token, MyBeerForm wnd) {
         setTitle("Add Beer Window");
         add(mainPanel);
@@ -54,6 +62,7 @@ public class AddBeerWindow extends JFrame {
             int returnValue = chooser.showDialog(null, "Add image");
             if(returnValue == JFileChooser.APPROVE_OPTION) {
                 imageFile = chooser.getSelectedFile();
+                addImageButton.setText(imageFile.getName());
             }
         });
 

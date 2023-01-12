@@ -11,6 +11,14 @@ import java.io.StringReader;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
+/**
+ * The ReviewForm class is responsible for displaying the details of a review in a user-friendly manner. It allows users to view the details of the review, such as the author, rating, title, and content, as well as the ability to add comments to the review.
+ * The class takes in a token, a reviewObject representing the review, and a wnd object of type MyBeerForm as arguments.
+ * It first loads the author data by fetching the author's information using the provided token, and displaying the author's username as a button. Clicking on the button opens a new UserWindow with the author's information.
+ * It then sets the rating and title of the review, and formats the content of the review by replacing all newline characters with <br>.
+ * The class also includes functionality to add comments to the review by sending a post request to the server with the comment's content and the review's id, and displaying a message indicating whether the comment was added successfully or not.
+ * It also includes a button to toggle the visibility of comments on the review, and a border around the main panel.
+ */
 public class ReviewForm {
     private JButton authorButton;
     private JLabel ratingLabel;
@@ -93,9 +101,5 @@ public class ReviewForm {
 
     public JPanel getMainPanel() {
         return mainPanel;
-    }
-
-    public JButton getCommentsButton() {
-        return commentsButton;
     }
 }

@@ -3,6 +3,11 @@ import javax.json.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+/**
+ * The UserWindow class represents a window that displays information about a user.
+ * It takes in a JsonObject containing user data and displays the username and email fields.
+ * The window is closed when it is deactivated.
+ */
 public class UserWindow extends JFrame {
     private JPanel mainPanel;
     private JTextField usernameField;

@@ -1,23 +1,18 @@
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import javax.json.*;
 import javax.swing.*;
 
-import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
+/**
+ * LoginWindow is a class that extends JFrame, it is used for creating a GUI for logging in and signing up.
+ * It has various fields for logging in and signing up
+*/
 public class LoginWindow extends JFrame {
     private JPanel mainPanel;
     private JLabel logoField;
@@ -59,6 +54,11 @@ public class LoginWindow extends JFrame {
         loginUsernameField.requestFocus();
     }
 
+    /**
+     * This method initializes the signup fields by adding action listeners to them.
+     * It sets up the flow of focus between the fields so that when the user presses enter,
+     * focus is moved to the next field. The last field, signupConfPasswordField, triggers the signup() method when enter is pressed.
+     */
     private void initSignupFields() {
         signupFirstNameField.addActionListener(e->{
             signupLastNameField.requestFocus();
@@ -80,6 +80,11 @@ public class LoginWindow extends JFrame {
         });
     }
 
+    /**
+     * Initializes the login fields by adding action listeners to the loginUsernameField and loginPasswordField
+     * When the user presses the enter key on the loginUsernameField, the focus is set to the loginPasswordField
+     * When the user presses the enter key on the loginPasswordField, the login() method is called
+     */
     private void initLoginFields() {
         loginUsernameField.addActionListener(e->{
             loginPasswordField.requestFocus();
@@ -90,6 +95,11 @@ public class LoginWindow extends JFrame {
         });
     }
 
+    /**
+     * This method is used to handle signup process. It collects information from signup fields,
+     * verifies that the passwords match and sends a request to the backend. If the request is successful,
+     * it clears the signup fields and shows an information message. If it's not, it shows an error message.
+     */
     private void signup() {
         String firstName = signupFirstNameField.getText();
         String lastName = signupLastNameField.getText();
@@ -123,6 +133,11 @@ public class LoginWindow extends JFrame {
         }
     }
 
+    /**
+     * login method which logs in the user by sending request to the backend with provided username and password.
+     * If the response is not null it shows successful log in message and opens new MyBeerForm window and closes the current login window.
+     * If the response is null it shows error message and clears the password field.
+     */
     private void login() {
         String username = loginUsernameField.getText();
         String password = String.valueOf(loginPasswordField.getPassword());

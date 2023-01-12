@@ -7,11 +7,21 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.StringReader;
 
+/**
+ * This class creates a CommentForm, which is displayed as a child of a review in a comment tree.
+ * It loads the author data using the passed in token and commentData JsonObject, and displays the author's username in a button.
+ * When the author button is clicked, a new UserWindow is created and displayed with the author's userObject data.
+ * The mainPanel is given a light gray border to visually separate it from other comments.
+ */
 public class CommentForm {
     private JPanel mainPanel;
     private JButton authorButton;
     private JTextPane commentPane;
 
+    /**
+     * @param token - the authentication token for the current user
+     * @param commentData - the JsonObject containing the data for the comment to be displayed
+     */
     public CommentForm(String token, JsonObject commentData) {
         // load author data
         int authorID = commentData.getInt("author");

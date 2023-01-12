@@ -13,6 +13,11 @@ import java.net.URISyntaxException;
 
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
 
+/**
+ * Main application window that is created right after user logs in
+ * It provides options for user to add reviews, comment, and add new beers
+ * as well as search for beers by name and/or category
+ */
 public class MyBeerForm extends JFrame {
     private JTextField searchField;
     private JButton searchButton;
@@ -58,6 +63,11 @@ public class MyBeerForm extends JFrame {
         loadBeers(Backend.dataURL + "beers");
     }
 
+    /**
+     * Initialize search panel, that is:
+     * search field, setting it up typically for a search bar
+     * search button, filter button and category drop down list
+     */
     private void initSearchPanel() {
         final ActionListener searchListener = e->{
             try {
@@ -113,6 +123,10 @@ public class MyBeerForm extends JFrame {
         }
     }
 
+    /**
+     * Initialize user panel:
+     * user button, username and logout button
+     */
     private void initUserPanel() {
         ImageIcon imgIcon = new ImageIcon("user20x20.png");
         userButton.setIcon(imgIcon);
@@ -138,6 +152,11 @@ public class MyBeerForm extends JFrame {
         });
     }
 
+    /**
+     * Initialize beer panel:
+     * beer list, beer button, comment tree
+     * and add review form
+     */
     private void initBeerPanel() {
         // Setup beer list
         beerListModel = new DefaultListModel();
@@ -202,6 +221,13 @@ public class MyBeerForm extends JFrame {
         });
     }
 
+    /**
+     * Load beers from url. Beers are loaded into BeerData JsonArray
+     * after that all beer names are loaded into beer list.
+     * The first beer page in a list is loaded (if no beers are present in beer list
+     * an error message is displayed)
+     * @param url url to beer data
+     */
     private void loadBeers(String url) {
         // Load data
         String responseString = Backend.getJsonString(url, token);
@@ -216,6 +242,9 @@ public class MyBeerForm extends JFrame {
         }
     }
 
+    /**
+     * Populates beer list with beer names
+     */
     private void loadBeerList() {
         beerListModel.clear();
         for(int i=0; i<beersData.size(); i++) {
@@ -225,6 +254,10 @@ public class MyBeerForm extends JFrame {
         }
     }
 
+    /**
+     * Loads beer page for a beer
+     * @param idx id of a beer to be loaded
+     */
     private void loadBeerPage(int idx) {
         JsonObject beerObject = beersData.getJsonObject(idx);
 
@@ -265,6 +298,10 @@ public class MyBeerForm extends JFrame {
         reviewArea.setText("");
     }
 
+    /**
+     * loads reviews and comment left under a beer
+     * @param beerObject JsonObject containing specific beer information
+     */
     private void loadReviewsAndComments(JsonObject beerObject) {
         DefaultTreeModel model = (DefaultTreeModel) commentTree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
@@ -302,10 +339,17 @@ public class MyBeerForm extends JFrame {
         commentTree.expandRow(0);
     }
 
+    /**
+     * Reloads reviews and comments after change on backend
+     * for example after adding comment/review
+     */
     public void reloadReviewsAndComments() {
         loadReviewsAndComments(currBeer);
     }
 
+    /**
+     * Reloads beers after adding in new beer
+     */
     public void reloadBeers() {
         loadBeers(Backend.dataURL + "/beers");
     }

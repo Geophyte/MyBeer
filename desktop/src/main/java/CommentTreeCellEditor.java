@@ -4,6 +4,10 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import java.awt.*;
 import java.util.EventObject;
 
+/**
+ * CommentTreeCellEditor is a class that extends DefaultTreeCellEditor.
+ * It is used to provide custom behavior for editing cells in a JTree component.
+ */
 public class CommentTreeCellEditor extends DefaultTreeCellEditor {
     public CommentTreeCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
         super(tree, renderer);
