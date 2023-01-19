@@ -19,8 +19,8 @@ Proponowana technologia: Django
 
 (Ignacy Dąbkowski)
 
-* jednostkowe
-* integracyjne
+* ✅ jednostkowe
+* ✅ integracyjne
 
 ### Aplikacja desktopowa (webowa)
 
@@ -41,22 +41,22 @@ Proponowana technologia: Django
 
 * Interakcja z API (Jakub Jażdżyk)
     * Tworzenie danych
-        * Dodawanie piwa
-        * Dodawanie recenzji
-        * Dodawanie komentarzy
-        * Rejestracja użytkownika
+        * ✅ Dodawanie piwa
+        * ✅ Dodawanie recenzji
+        * ✅ Dodawanie komentarzy
+        * ✅ Rejestracja użytkownika
     * Pobieranie danych
-        * Lista piw
-        * Jedno piwo
-        * Recenzje
-        * Komentarze
-        * Dane użytkownika
+        * ✅ Lista piw
+        * ✅ Jedno piwo
+        * ✅ Recenzje
+        * ✅ Komentarze
+        * ✅ Dane użytkownika
     * Edytowanie danych
-        * Edytowanie recenzji
-        * Edytowanie komentarza
+        * ✅ Edytowanie recenzji
+        * ✅ Edytowanie komentarza
     * Usuwanie danych
-        * Usuwanie komentarzy
-        * Usuwanie recenzji
+        * ✅ Usuwanie komentarzy
+        * ✅ Usuwanie recenzji
 
 Proponowana technologia: Java (Swing)
 
@@ -64,7 +64,7 @@ Proponowana technologia: Java (Swing)
 
 (Ireneusz Okniński)
 
-* Potwierdzanie dodania nowego produktu do bazy danych
+* ✅ Potwierdzanie dodania nowego produktu do bazy danych
 * ✅ Zarządzanie użytkownikami
 * ✅ Moderowanie recenzji i komentarzy
 
